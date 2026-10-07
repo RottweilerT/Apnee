@@ -1,0 +1,665 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Apnée RottweilerT</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout : appli mobile à une colonne, onglets en barre basse ; chrono plein écran pendant la séance */
+:root{
+  --bg:#EAF0F0; --surface:#F7FAFA; --ink:#0D2730; --muted:#557079; --line:#C9D7D9;
+  --deep:#0B6E78; --deep-soft:#D3E8E9; --breath:#C98A1E; --breath-soft:#F5E6C8;
+  --danger:#B23A3A; --ok:#2F7D4F;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#081A20; --surface:#0E252D; --ink:#E3F0F1; --muted:#8FAAB1; --line:#1F3D46;
+  --deep:#3FB7C1; --deep-soft:#123A42; --breath:#E9B04B; --breath-soft:#3A2E16;
+  --danger:#E57373; --ok:#6CC08B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#081A20; --surface:#0E252D; --ink:#E3F0F1; --muted:#8FAAB1; --line:#1F3D46;
+  --deep:#3FB7C1; --deep-soft:#123A42; --breath:#E9B04B; --breath-soft:#3A2E16;
+  --danger:#E57373; --ok:#6CC08B; color-scheme:dark}
+*{box-sizing:border-box} [hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:20px 110px}
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.55rem;letter-spacing:-.02em;margin:0;line-height:1.1}
+.brand span{color:var(--deep)}
+.who{font-size:.85rem;color:var(--muted);text-align:right}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.35rem;margin:0 0 4px;text-wrap:balance;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0 0 18px;max-width:60ch}
+.label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.stack{display:grid;gap:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:420px){.grid2.wrap1{grid-template-columns:1fr}}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-size:.85rem;font-weight:700}
+.field small{color:var(--muted);font-size:.8rem}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer;border-radius:999px;border:1px solid transparent;padding:11px 18px;font-weight:700}
+.btn{background:var(--deep);color:var(--surface)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-danger{background:transparent;border-color:var(--danger);color:var(--danger)}
+.btn-wide{width:100%;padding:14px 18px;font-size:1.05rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:8px 14px;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--deep-soft);border-color:var(--deep);color:var(--ink)}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--breath);padding:4px 0 4px 12px}
+.warn{font-size:.88rem;color:var(--danger)}
+/* Tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs .in{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;max-width:640px}
+nav.tabs button{background:transparent;color:var(--muted);border-radius:12px;padding:8px 4px;display:grid;justify-items:center;gap:2px;font-size:.8rem}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button[aria-selected="true"]{color:var(--deep);background:var(--deep-soft)}
+nav.tabs button:disabled{opacity:.4;cursor:not-allowed}
+/* Plan preview */
+.plan{display:grid;gap:6px;margin-top:4px}
+.step{display:grid;grid-template-columns:2.2rem 1fr auto;align-items:center;gap:10px;font-size:.92rem}
+.step .idx{font-family:var(--f-num);color:var(--muted);font-size:.8rem}
+.bar{height:12px;border-radius:6px;display:flex;overflow:hidden;background:var(--bg)}
+.bar i{display:block;height:100%}
+.bar .a{background:var(--deep)} .bar .r{background:var(--breath);opacity:.75}
+.step .t{font-family:var(--f-num);font-size:.82rem;white-space:nowrap;text-align:right}
+.legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted)}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.totals{display:flex;gap:20px;flex-wrap:wrap}
+.totals div{display:grid}
+.totals strong{font-family:var(--f-num);font-size:1.1rem}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:grid;gap:2px}
+.stat strong{font-family:var(--f-num);font-size:1.45rem;font-variant-numeric:tabular-nums}
+.stat.hero{grid-column:1/-1;background:var(--deep);border-color:var(--deep);color:var(--surface)}
+.stat.hero .label{color:var(--surface);opacity:.85}
+.stat.hero strong{font-size:2.3rem}
+.chartbox{overflow-x:auto}
+.chartbox svg{display:block;width:100%;height:auto}
+.hist{display:grid;gap:8px}
+.hrow{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.hrow .d{font-weight:700}
+.hrow .m{color:var(--muted);font-size:.85rem;min-width:0;overflow-wrap:anywhere}
+.hrow .b{font-family:var(--f-num);font-weight:700;font-size:1.1rem;text-align:right}
+.hrow .x{grid-column:2;justify-self:end;background:none;border:none;color:var(--muted);padding:2px 0;font-size:.8rem;font-weight:400;text-decoration:underline}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--breath-soft);color:var(--ink);margin-left:6px;vertical-align:1px}
+.empty{text-align:center;padding:28px 16px;color:var(--muted)}
+.empty svg{width:64px;height:64px;color:var(--deep);opacity:.7}
+/* Runner */
+#runner{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));transition:background .6s}
+#runner.ph-apnea{background:var(--deep-soft)} #runner.ph-rest,#runner.ph-prep{background:var(--breath-soft)}
+@media (prefers-reduced-motion:reduce){#runner{transition:none}}
+.rtop{display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:520px;width:100%;margin:0 auto}
+.rmain{flex:1;display:grid;place-items:center;align-content:center;gap:10px;text-align:center}
+.phase{font-family:var(--f-display);font-weight:800;font-size:1.9rem;letter-spacing:-.01em}
+.ring{width:min(78vw,320px);aspect-ratio:1;max-width:100%;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .clock{position:absolute;inset:0;display:grid;place-content:center;gap:2px}
+.ring .clock strong{font-family:var(--f-num);font-size:clamp(3rem,16vw,4.6rem);font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.ring .clock span{font-size:.9rem;color:var(--muted)}
+.next{color:var(--muted);font-size:.95rem}
+.ractions{display:grid;gap:10px;max-width:520px;width:100%;margin:0 auto}
+.btn-breathe{background:var(--ink);color:var(--bg);padding:20px;font-size:1.2rem}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--deep)} .dots i.cur{background:var(--breath)}
+.confirm{background:var(--surface);border:1px solid var(--danger);border-radius:12px;padding:12px;display:grid;gap:10px}
+.sum{display:grid;gap:6px;width:100%;max-width:420px;text-align:left}
+.sum .srow{display:flex;justify-content:space-between;font-family:var(--f-num);font-size:.95rem;border-bottom:1px dashed var(--line);padding-block:4px}
+.feel{display:flex;gap:6px;justify-content:center}
+.feel button{width:44px;height:44px;padding:0;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.feel button[aria-pressed="true"]{background:var(--deep);color:var(--surface);border-color:var(--deep)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.9rem;z-index:30}
+.status{font-size:.8rem;color:var(--muted)}
+.accs{display:grid;gap:8px}
+.acc{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--ink);font-weight:400}
+.acc[aria-pressed="true"]{border-color:var(--deep);background:var(--deep-soft)}
+.acc .n{font-weight:700;display:block}
+.acc .m{font-size:.82rem;color:var(--muted)}
+.acc .r{font-family:var(--f-num);font-weight:700}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.1rem;background:var(--deep);color:var(--surface)}
+.acct{display:flex;gap:14px;align-items:center}
+.acct .avatar{width:56px;height:56px;font-size:1.4rem}
+.aname{font-family:var(--f-display);font-weight:700;font-size:1.3rem;overflow-wrap:anywhere}
+.pin{letter-spacing:.3em}
+button.who{background:var(--surface);border:1px solid var(--line);color:var(--ink);font-weight:700;font-size:.85rem;padding:6px 12px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.sounds{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sounds li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.9rem;border-bottom:1px dashed var(--line);padding-block:4px}
+.sounds li span{color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand">Apnée <span>RottweilerT</span></h1>
+    <button class="who" id="who" type="button">Chargement…</button>
+  </header>
+
+  <!-- COMPTES -->
+  <section id="tab-profil" class="stack">
+    <!-- Connexion -->
+    <div id="authView" class="stack">
+      <div>
+        <h2>Qui s'entraîne ?</h2>
+        <p class="lead">Choisis ton compte pour retrouver tes séances et ta progression. Chaque personne a son propre historique.</p>
+      </div>
+      <div class="accs" id="accList"></div>
+      <form id="pinBox" class="panel stack" hidden novalidate>
+        <div class="field"><label for="pinIn" id="pinLabel">Code</label><input id="pinIn" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>
+        <p class="warn" id="pinErr" hidden></p>
+        <div class="row"><button class="btn" type="submit">Se connecter</button><button class="btn-ghost" type="button" id="pinCancel">Annuler</button></div>
+      </form>
+      <button class="btn-ghost btn-wide" id="newAcc" type="button">+ Créer un compte</button>
+    </div>
+
+    <!-- Inscription / modification -->
+    <div id="formView" class="stack" hidden>
+      <div>
+        <h2 id="pTitle">Inscription</h2>
+        <p class="lead" id="pLead">Crée ton compte d'apnéiste. Ton prénom ou ton pseudo apparaît sur ton profil, et tes séances restent séparées de celles des autres.</p>
+      </div>
+      <form id="pForm" class="panel stack" novalidate>
+        <div class="field"><label for="pName">Prénom ou pseudo</label><input id="pName" required maxlength="40" placeholder="Armand" autocomplete="off"></div>
+        <div class="grid2 wrap1">
+          <div class="field"><label for="pPin" id="pPinLabel">Code personnel</label><input id="pPin" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password"><small id="pPinHelp">4 à 8 chiffres, facultatif</small></div>
+          <div class="field"><label for="pPin2">Confirme le code</label><input id="pPin2" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password"></div>
+        </div>
+        <div class="field"><label for="pLevel">Niveau</label>
+          <select id="pLevel"><option value="debutant">Débutant (moins de 2 min)</option><option value="intermediaire">Intermédiaire (2 à 4 min)</option><option value="confirme">Confirmé (plus de 4 min)</option></select></div>
+        <div class="grid2">
+          <div class="field"><label for="pRecord">Record actuel</label><input id="pRecord" class="num" inputmode="numeric" placeholder="2:30"><small>min:sec, si tu le connais</small></div>
+          <div class="field"><label for="pGoal">Objectif</label><input id="pGoal" class="num" inputmode="numeric" placeholder="4:00"><small>min:sec</small></div>
+        </div>
+        <p class="warn" id="pErr" hidden></p>
+        <div class="row"><button class="btn" type="submit" id="pSubmit">Créer mon compte</button><button class="btn-ghost" type="button" id="pCancel">Annuler</button></div>
+      </form>
+    </div>
+
+    <!-- Compte connecté -->
+    <div id="acctView" class="stack" hidden>
+      <div class="panel acct">
+        <div class="avatar" id="aAvatar" aria-hidden="true"></div>
+        <div style="min-width:0"><div class="aname" id="aName"></div><div class="status" id="aMeta"></div></div>
+      </div>
+      <div class="row">
+        <button class="btn-ghost" type="button" id="editAcc">Modifier mon profil</button>
+        <button class="btn-ghost" type="button" id="logout">Changer d'utilisateur</button>
+      </div>
+      <div id="delZone"><button class="btn-danger" type="button" id="delAcc">Supprimer mon compte</button></div>
+    </div>
+
+    <p class="status" id="pStore"></p>
+    <p class="note">Apnée statique à sec uniquement, assis ou allongé. Ne pratique jamais l'apnée dans l'eau seul, et n'hyperventile pas avant une apnée.</p>
+  </section>
+
+  <!-- SEANCE -->
+  <section id="tab-seance" class="stack" hidden>
+    <div>
+      <h2>Organiser une séance</h2>
+      <p class="lead">Choisis un modèle ou règle chaque paramètre. Les apnées et les repos peuvent augmenter ou diminuer à chaque tour.</p>
+    </div>
+    <div class="chips" role="group" aria-label="Modèles de séance" id="presets">
+      <button class="chip" data-p="prog" aria-pressed="true">Progressive</button>
+      <button class="chip" data-p="co2" aria-pressed="false">Table CO₂</button>
+      <button class="chip" data-p="o2" aria-pressed="false">Table O₂</button>
+      <button class="chip" data-p="max" aria-pressed="false">Essai record</button>
+    </div>
+    <p class="status" id="presetInfo"></p>
+    <div class="panel stack">
+      <div class="grid2">
+        <div class="field"><label for="sA0">1ʳᵉ apnée</label><input id="sA0" class="num" inputmode="numeric" value="1:00"></div>
+        <div class="field"><label for="sAd">Ajout par apnée</label><input id="sAd" class="num" inputmode="numeric" value="1:00"><small>0:00 = durée fixe</small></div>
+        <div class="field"><label for="sR0">1ᵉʳ repos</label><input id="sR0" class="num" inputmode="numeric" value="0:30"></div>
+        <div class="field"><label for="sRd">Variation du repos</label><input id="sRd" class="num" inputmode="text" value="0:30"><small>« -0:15 » pour réduire</small></div>
+        <div class="field"><label for="sN">Nombre d'apnées</label><input id="sN" class="num" type="number" min="1" max="12" value="3"></div>
+        <div class="field"><label for="sPrep">Respiration libre au départ</label><input id="sPrep" class="num" inputmode="numeric" value="1:00"><small>1:00 par défaut</small></div>
+      </div>
+      <div class="field"><label class="row" style="gap:8px;font-weight:400"><input type="checkbox" id="sMax" style="width:auto"> Dernière apnée en maximale (chrono libre)</label></div>
+    </div>
+    <div class="panel stack">
+      <div class="row" style="justify-content:space-between"><span class="label">Aperçu</span>
+        <div class="legend"><span><b style="background:var(--deep)"></b>Apnée</span><span><b style="background:var(--breath)"></b>Repos</span></div></div>
+      <div class="plan" id="plan"></div>
+      <div class="totals"><div><span class="label">Durée totale</span><strong id="tTot">–</strong></div><div><span class="label">En apnée</span><strong id="tApn">–</strong></div><div><span class="label">Plus longue</span><strong id="tMax">–</strong></div></div>
+      <p class="warn" id="planWarn" hidden></p>
+    </div>
+    <div class="panel stack">
+      <div class="row" style="justify-content:space-between"><span class="label">Signaux sonores</span><button class="btn-ghost" id="testSnd" style="padding:6px 14px;font-size:.85rem">Écouter les bips</button></div>
+      <ul class="sounds">
+        <li><b>Début d'apnée</b><span>mélodie montante, bien distincte</span></li>
+        <li><b>10 s avant une apnée</b><span>deux bips d'alerte, puis 3, 2, 1</span></li>
+        <li><b>Chaque minute d'apnée</b><span>deux bips aigus</span></li>
+        <li><b>Chaque minute de respiration</b><span>un bip grave</span></li>
+        <li><b>Fin d'apnée</b><span>deux notes descendantes</span></li>
+      </ul>
+    </div>
+    <button class="btn btn-wide" id="start">Démarrer la séance</button>
+  </section>
+
+  <!-- HISTORIQUE -->
+  <section id="tab-hist" class="stack" hidden>
+    <div><h2>Historique et progression</h2><p class="lead">Ton meilleur temps de chaque séance, et l'évolution de ton record personnel.</p></div>
+    <div class="stats" id="stats"></div>
+    <div class="panel stack">
+      <div class="row" style="justify-content:space-between"><span class="label">Évolution du record</span>
+        <div class="legend"><span><b style="background:var(--deep)"></b>Record</span><span><b style="background:var(--breath)"></b>Meilleure apnée du jour</span></div></div>
+      <div class="chartbox" id="chart"></div>
+    </div>
+    <details class="panel" id="addBox">
+      <summary style="cursor:pointer;font-weight:700">Ajouter un essai fait sans l'appli</summary>
+      <form id="addForm" class="stack" style="margin-top:12px" novalidate>
+        <div class="grid2"><div class="field"><label for="aDate">Date</label><input id="aDate" type="date"></div>
+        <div class="field"><label for="aTime">Meilleure apnée</label><input id="aTime" class="num" inputmode="numeric" placeholder="3:30"></div></div>
+        <p class="warn" id="aErr" hidden></p>
+        <button class="btn" type="submit">Ajouter</button>
+      </form>
+    </details>
+    <div><span class="label">Séances</span></div>
+    <div class="hist" id="hist"></div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Onglets"><div class="in" role="tablist">
+  <button role="tab" id="t-profil" data-tab="profil" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profil</button>
+  <button role="tab" id="t-seance" data-tab="seance" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M10 2h4"/></svg>Séance</button>
+  <button role="tab" id="t-hist" data-tab="hist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg>Historique</button>
+</div></nav>
+
+<div id="runner" hidden>
+  <div class="rtop"><span class="label" id="rStep"></span><button class="btn-ghost" id="rStop" style="padding:8px 14px;font-size:.9rem">Arrêter</button></div>
+  <div class="rmain" id="rMain">
+    <div class="phase" id="rPhase"></div>
+    <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="var(--line)" stroke-width="7"/><circle id="rArc" cx="60" cy="60" r="54" fill="none" stroke="var(--deep)" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/></svg>
+      <div class="clock"><strong id="rClock">0:00</strong><span id="rSub"></span></div></div>
+    <div class="next" id="rNext"></div>
+    <div class="dots" id="rDots"></div>
+  </div>
+  <div class="ractions" id="rActions"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); };
+const parseT = v => { v = String(v||'').trim(); if(!v) return null; let neg = false; if (/^[-−]/.test(v)) { neg = true; v = v.slice(1); } v = v.replace(/^\+/,'');
+  let s; if (/^\d+$/.test(v)) s = +v * (+v <= 15 ? 60 : 1); else { const m = v.match(/^(\d+)\s*[:'m.h]\s*(\d{1,2})\s*(s|")?$/); if(!m) return null; s = +m[1]*60 + +m[2]; }
+  return neg ? -s : s; };
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast = msg => { const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2600); };
+
+/* ---------- Stockage : comptes nominatifs, chacun avec son historique ---------- */
+const LS='apnee-rtt-v2', LS_OLD='apnee-rtt-v1', LS_CUR='apnee-rtt-current';
+const lsGet=k=>{ try{ return localStorage.getItem(k); }catch{ return null; } };
+const lsSet=(k,v)=>{ try{ v==null?localStorage.removeItem(k):localStorage.setItem(k,v); }catch{} };
+const local={
+  read(){ let d=null; try{ d=JSON.parse(lsGet(LS)); }catch{}
+    if(!d){ d={accounts:{}}; try{ const o=JSON.parse(lsGet(LS_OLD)); if(o&&o.profile){ d.accounts.profile={...o.profile, sessions:o.sessions||[]}; } }catch{} }
+    return d; },
+  write(d){ lsSet(LS, JSON.stringify(d)); }
+};
+const newId=()=>'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const store={
+  mode:'local', db:null, uid:null,
+  async init(){
+    try{ if(window.claude?.use){ const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+      if(db&&user){ const id=await user.id(); if(id){ this.db=db; this.uid=id; this.mode='cloud'; } } } }catch{}
+  },
+  fallback(){ if(this.mode==='cloud'){ this.mode='local'; toast("Enregistrement en ligne indisponible : les comptes sont gardés dans ce navigateur."); } },
+  async run(cloudFn, localFn){
+    if(this.mode==='cloud'){ try{ return await cloudFn(); }catch(e){ if(e&&(e.code==='invalid_argument'||e.code==='not_granted'||e.code==='revoked'||e.code==='capability_disabled')){ this.fallback(); return localFn(); } throw e; } }
+    return localFn();
+  },
+  accCol(){ return this.db.collection('data/users/'+this.uid); },
+  sesCol(aid){ return this.accCol().doc(aid).collection('sessions'); },
+  async listAccounts(){ return this.run(async()=>{ const q=await this.accCol().get(); return q.docs.filter(d=>d.data()?.name).map(d=>({id:d.id,...d.data()})); },
+    ()=>Object.entries(local.read().accounts).map(([id,a])=>{ const {sessions,...r}=a; return {id,...r}; })); },
+  async saveAccount(id,a){ return this.run(()=>this.accCol().doc(id).set(a), ()=>{ const d=local.read(); d.accounts[id]={...a, sessions:d.accounts[id]?.sessions||[]}; local.write(d); }); },
+  async deleteAccount(id){ return this.run(async()=>{ const q=await this.sesCol(id).get(); for(const doc of q.docs) await this.sesCol(id).doc(doc.id).delete(); await this.accCol().doc(id).delete(); },
+    ()=>{ const d=local.read(); delete d.accounts[id]; local.write(d); }); },
+  async listSessions(aid){ return this.run(async()=>{ const q=await this.sesCol(aid).get(); return q.docs.map(d=>({id:d.id,...d.data()})); }, ()=>local.read().accounts[aid]?.sessions||[]); },
+  async addSession(aid,s){ return this.run(async()=>{ const ref=this.sesCol(aid).doc(); await ref.set(s); return {id:ref.id,...s}; },
+    ()=>{ const d=local.read(); const o={id:'s'+Date.now().toString(36),...s}; (d.accounts[aid].sessions ||= []).push(o); local.write(d); return o; }); },
+  async delSession(aid,id){ return this.run(()=>this.sesCol(aid).doc(id).delete(), ()=>{ const d=local.read(); const a=d.accounts[aid]; if(a) a.sessions=(a.sessions||[]).filter(x=>x.id!==id); local.write(d); }); }
+};
+async function hashPin(pin, salt){ try{ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt+':'+pin)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch{ return 'p:'+btoa(salt+pin); } }
+
+let accounts=[], accId=null, profile=null, sessions=[], currentTab='profil', formMode='create', pendingAcc=null;
+const LEVELS={debutant:'débutant',intermediaire:'intermédiaire',confirme:'confirmé'};
+const initials=n=>(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+/* ---------- Onglets ---------- */
+function showTab(t){
+  if (!profile && t!=='profil') t='profil';
+  currentTab=t;
+  for (const k of ['profil','seance','hist']){ $('tab-'+k).hidden = k!==t; $('t-'+k).setAttribute('aria-selected', k===t); }
+  if (t==='hist') renderHist();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function lockTabs(){ $('t-seance').disabled = !profile; $('t-hist').disabled = !profile; }
+$('who').addEventListener('click',()=>showTab('profil'));
+
+/* ---------- Comptes ---------- */
+function view(v){ $('authView').hidden=v!=='auth'; $('formView').hidden=v!=='form'; $('acctView').hidden=v!=='acct'; }
+function renderAccounts(){
+  $('who').textContent = profile ? profile.name : 'Se connecter';
+  $('t-profil').lastChild.textContent = profile ? 'Compte' : 'Connexion';
+  $('pStore').textContent = store.mode==='cloud'
+    ? 'Les comptes et les séances sont enregistrés sur ton compte Claude, sur tous tes appareils. Personne d\'autre ne les voit.'
+    : 'Les comptes et les séances sont enregistrés dans ce navigateur, sur cet appareil.';
+  lockTabs();
+  if(profile){
+    $('aAvatar').textContent=initials(profile.name); $('aName').textContent=profile.name;
+    const best=bestEver(); $('aMeta').textContent=[LEVELS[profile.level], sessions.length+' séance'+(sessions.length>1?'s':''), best?'record '+fmt(best):null].filter(Boolean).join(' · ');
+    resetDel(); view('acct'); return;
+  }
+  $('pinBox').hidden=true; pendingAcc=null;
+  const list=[...accounts].sort((a,b)=>a.name.localeCompare(b.name,'fr'));
+  $('accList').innerHTML = list.length ? list.map(a=>`<button class="acc" type="button" data-id="${esc(a.id)}" aria-pressed="false">
+      <span class="avatar">${esc(initials(a.name))}</span><span style="min-width:0"><span class="n">${esc(a.name)}</span><span class="m">${esc(LEVELS[a.level]||'')}${a.pin?' · code':''}</span></span>
+      <span class="r">${a.record?fmt(a.record):''}</span></button>`).join('')
+    : '<p class="status" style="margin:0">Aucun compte pour l\'instant. Crée le premier pour commencer.</p>';
+  $('accList').querySelectorAll('.acc').forEach(b=>b.onclick=()=>pickAccount(b.dataset.id));
+  if(!list.length){ openForm('create'); return; }
+  view('auth');
+}
+function pickAccount(id){
+  const a=accounts.find(x=>x.id===id); if(!a) return;
+  $('accList').querySelectorAll('.acc').forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===id));
+  if(!a.pin){ login(a); return; }
+  pendingAcc=a; $('pinLabel').textContent='Code de '+a.name; $('pinIn').value=''; $('pinErr').hidden=true; $('pinBox').hidden=false; $('pinIn').focus();
+}
+$('pinBox').addEventListener('submit', async e=>{ e.preventDefault(); if(!pendingAcc) return;
+  const h=await hashPin($('pinIn').value.trim(), pendingAcc.id);
+  if(h!==pendingAcc.pin){ $('pinErr').textContent='Code incorrect. Réessaie.'; $('pinErr').hidden=false; $('pinIn').select(); return; }
+  login(pendingAcc); });
+$('pinCancel').onclick=()=>{ pendingAcc=null; $('pinBox').hidden=true; $('accList').querySelectorAll('.acc').forEach(b=>b.setAttribute('aria-pressed','false')); };
+async function login(a){
+  accId=a.id; profile=a; lsSet(LS_CUR, a.id);
+  try{ sessions=(await store.listSessions(a.id))||[]; }catch{ sessions=[]; toast('Impossible de charger tes séances pour le moment.'); }
+  renderAccounts(); applyPreset('prog'); toast('Bonjour '+a.name+' !'); showTab('seance');
+}
+function logout(){ accId=null; profile=null; sessions=[]; lsSet(LS_CUR,null); renderAccounts(); showTab('profil'); }
+$('logout').onclick=logout;
+$('newAcc').onclick=()=>openForm('create');
+$('editAcc').onclick=()=>openForm('edit');
+$('pCancel').onclick=()=>{ $('pErr').hidden=true; profile?view('acct'):(accounts.length?view('auth'):null); };
+function openForm(mode){
+  formMode=mode; $('pErr').hidden=true; $('pPin').value=''; $('pPin2').value='';
+  const edit=mode==='edit'&&profile;
+  $('pTitle').textContent=edit?'Modifier mon profil':'Inscription';
+  $('pLead').textContent=edit?'Ton record et ton objectif servent de repères dans les séances.':'Crée ton compte d\'apnéiste. Ton prénom ou ton pseudo apparaît sur ton profil, et tes séances restent séparées de celles des autres.';
+  $('pSubmit').textContent=edit?'Enregistrer':'Créer mon compte';
+  $('pPinLabel').textContent=edit?'Nouveau code':'Code personnel';
+  $('pPinHelp').textContent=edit?(profile.pin?'laisse vide pour garder ton code':'4 à 8 chiffres, facultatif'):'4 à 8 chiffres, facultatif';
+  $('pName').value=edit?profile.name:''; $('pLevel').value=edit?(profile.level||'debutant'):'debutant';
+  $('pRecord').value=edit&&profile.record?fmt(profile.record):''; $('pGoal').value=edit&&profile.goal?fmt(profile.goal):'';
+  $('pCancel').hidden = !edit && !accounts.length;
+  view('form'); $('pName').focus();
+}
+$('pForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name=$('pName').value.trim().replace(/\s+/g,' '), rec=$('pRecord').value.trim(), goal=$('pGoal').value.trim(), pin=$('pPin').value.trim(), pin2=$('pPin2').value.trim();
+  const err=m=>{ $('pErr').textContent=m; $('pErr').hidden=false; };
+  $('pErr').hidden=true;
+  const edit=formMode==='edit'&&profile;
+  if(!name) return err('Indique ton prénom ou ton pseudo.');
+  if(accounts.some(a=>a.id!==(edit?accId:null) && a.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))) return err('Ce nom est déjà pris. Ajoute une initiale, par exemple « '+name+' B. ».');
+  if(pin && !/^\d{4,8}$/.test(pin)) return err('Le code doit faire 4 à 8 chiffres.');
+  if(pin !== pin2) return err('Les deux codes ne sont pas identiques.');
+  const r = rec ? parseT(rec) : null, g = goal ? parseT(goal) : null;
+  if (rec && !(r>0)) return err('Record : écris la durée en minutes:secondes, par exemple 2:30.');
+  if (goal && !(g>0)) return err('Objectif : écris la durée en minutes:secondes, par exemple 4:00.');
+  const id = edit ? accId : newId();
+  const a = { name, level:$('pLevel').value, record:r||null, goal:g||null,
+    pin: pin ? await hashPin(pin,id) : (edit ? (profile.pin||null) : null),
+    createdAt: edit ? (profile.createdAt||new Date().toISOString()) : new Date().toISOString() };
+  $('pSubmit').disabled=true;
+  try{
+    await store.saveAccount(id,a);
+    const full={id,...a}; accounts=accounts.filter(x=>x.id!==id).concat(full);
+    if(edit){ profile=full; renderAccounts(); buildPlan(); toast('Profil enregistré'); }
+    else { sessions=[]; await login(full); toast('Compte créé, bienvenue '+name+' !'); }
+  }catch(ex){ err("L'enregistrement a échoué. Vérifie ta connexion et réessaie."); }
+  finally{ $('pSubmit').disabled=false; }
+});
+function resetDel(){ $('delZone').innerHTML='<button class="btn-danger" type="button" id="delAcc">Supprimer mon compte</button>'; $('delAcc').onclick=askDel; }
+function askDel(){
+  $('delZone').innerHTML=`<div class="confirm"><strong>Supprimer le compte de ${esc(profile.name)} ?</strong><span class="status">Toutes ses séances seront effacées. C'est définitif.</span><div class="row"><button class="btn-danger" type="button" id="delYes">Supprimer définitivement</button><button class="btn-ghost" type="button" id="delNo">Annuler</button></div></div>`;
+  $('delNo').onclick=resetDel;
+  $('delYes').onclick=async()=>{ $('delYes').disabled=true; try{ await store.deleteAccount(accId); accounts=accounts.filter(x=>x.id!==accId); toast('Compte supprimé'); logout(); }catch{ toast('La suppression a échoué, réessaie.'); resetDel(); } };
+}
+
+/* ---------- Séance : construction ---------- */
+const presets = {
+  prog:{a0:'1:00',ad:'1:00',r0:'0:30',rd:'0:30',n:3,prep:'1:00',max:false,info:'Paliers qui s\'allongent : idéal pour monter en durée.'},
+  co2:{a0:'1:30',ad:'0:00',r0:'2:00',rd:'-0:15',n:8,prep:'1:00',max:false,info:'Apnée fixe, repos de plus en plus court : habitue ton corps au CO₂.'},
+  o2:{a0:'1:00',ad:'0:15',r0:'2:00',rd:'0:00',n:8,prep:'1:00',max:false,info:'Repos fixe, apnée qui s\'allonge : travaille le manque d\'oxygène.'},
+  max:{a0:'1:00',ad:'1:00',r0:'2:00',rd:'0:00',n:3,prep:'1:00',max:true,info:'Deux apnées d\'échauffement, puis une maximale chronométrée.'}
+};
+function adaptPreset(k){
+  const p={...presets[k]}; const rec=profile?.record;
+  if (rec && (k==='co2'||k==='o2')){ // tables classiques basées sur ~50 % du record
+    if(k==='co2'){ p.a0=fmt(Math.round(rec*0.5/5)*5); }
+    if(k==='o2'){ p.a0=fmt(Math.round(rec*0.4/5)*5); p.ad=fmt(Math.max(5,Math.round(rec*0.4/7/5)*5)); }
+  }
+  if (rec && k==='max'){ p.a0=fmt(Math.round(rec*0.4/5)*5); p.ad=fmt(Math.round(rec*0.2/5)*5); }
+  return p;
+}
+function applyPreset(k){
+  const p=adaptPreset(k);
+  $('sA0').value=p.a0; $('sAd').value=p.ad; $('sR0').value=p.r0; $('sRd').value=p.rd; $('sN').value=p.n; $('sPrep').value=p.prep; $('sMax').checked=p.max;
+  document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.p===k));
+  $('presetInfo').textContent=p.info + (profile?.record && k!=='prog' ? ' Calée sur ton record de '+fmt(profile.record)+'.' : '');
+  buildPlan();
+}
+document.querySelectorAll('#presets .chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.p)));
+['sA0','sAd','sR0','sRd','sN','sPrep','sMax'].forEach(id=>$(id).addEventListener('input',()=>{ document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed','false')); $('presetInfo').textContent='Séance personnalisée.'; buildPlan(); }));
+
+let plan=null;
+function buildPlan(){
+  const a0=parseT($('sA0').value), ad=parseT($('sAd').value)??0, r0=parseT($('sR0').value), rd=parseT($('sRd').value)??0, prep=parseT($('sPrep').value)??0;
+  const n=Math.min(12,Math.max(1,parseInt($('sN').value)||1)), mx=$('sMax').checked;
+  const w=$('planWarn'); w.hidden=true;
+  if(!(a0>0) || r0==null || r0<0){ plan=null; $('plan').innerHTML='<p class="warn">Écris les durées en minutes:secondes, par exemple 1:30.</p>'; $('start').disabled=true; ['tTot','tApn','tMax'].forEach(i=>$(i).textContent='–'); return; }
+  const steps=[];
+  for(let i=0;i<n;i++){
+    const apnea=Math.max(10,a0+ad*i), rest = i<n-1 ? Math.max(15,r0+rd*i) : 0;
+    steps.push({apnea, rest, max: mx && i===n-1});
+  }
+  plan={prep:Math.max(0,prep), steps};
+  const peak=Math.max(...steps.map(s=>s.apnea+s.rest),1);
+  $('plan').innerHTML=steps.map((s,i)=>`<div class="step"><span class="idx">${String(i+1).padStart(2,'0')}</span>
+    <div class="bar" aria-hidden="true"><i class="a" style="width:${s.apnea/peak*100}%"></i><i class="r" style="width:${s.rest/peak*100}%"></i></div>
+    <span class="t">${s.max?'max':fmt(s.apnea)}${s.rest?' · '+fmt(s.rest):''}</span></div>`).join('');
+  const apn=steps.reduce((t,s)=>t+s.apnea,0), tot=plan.prep+apn+steps.reduce((t,s)=>t+s.rest,0);
+  $('tTot').textContent=(mx?'~':'')+fmt(tot); $('tApn').textContent=(mx?'~':'')+fmt(apn);
+  const longest=Math.max(...steps.filter(s=>!s.max).map(s=>s.apnea),0);
+  $('tMax').textContent=mx?'max':fmt(longest);
+  const ref = Math.max(profile?.record||0, bestEver());
+  if(ref && longest>ref) { w.textContent=`Une apnée prévue (${fmt(longest)}) dépasse ton record (${fmt(ref)}). Tu peux t'arrêter à tout moment pendant la séance.`; w.hidden=false; }
+  $('start').disabled=false;
+}
+const bestEver = () => sessions.reduce((m,s)=>Math.max(m,s.best||0),0);
+
+/* ---------- Séance : chrono ---------- */
+let audio=null, wake=null, run=null, raf=0;
+function beep(f=880,d=.15,v=.25){ try{ if(!audio) return; const o=audio.createOscillator(), g=audio.createGain(); o.frequency.value=f; o.connect(g); g.connect(audio.destination); const t=audio.currentTime; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.001,t+d); o.start(t); o.stop(t+d); }catch{} }
+function seq(notes,v=.3){ let t=0; notes.forEach(([f,d,gap])=>{ setTimeout(()=>beep(f,d,v),t*1000); t+=d+(gap??.05); }); }
+const snd = {
+  apneaStart(){ seq([[523,.12],[659,.12],[784,.12],[1046,.55]],.35); vib([200,80,200,80,400]); },
+  apneaEnd(){ seq([[784,.2,.06],[523,.35]]); vib([120,80,120]); },
+  warn10(){ seq([[740,.12,.12],[740,.12]]); vib([80,80,80]); },
+  count(){ beep(990,.08,.2); },
+  minApnea(){ seq([[1175,.09,.08],[1175,.09]],.28); vib([60,60,60]); },
+  minBreath(){ beep(392,.25,.28); vib(80); }
+};
+function ensureAudio(){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume?.(); }catch{} }
+$('testSnd').addEventListener('click',()=>{ ensureAudio(); const order=['apneaStart','warn10','minApnea','minBreath','apneaEnd']; order.forEach((k,i)=>setTimeout(()=>snd[k](),i*1400)); });
+function vib(p){ try{ navigator.vibrate?.(p); }catch{} }
+$('start').addEventListener('click', async ()=>{
+  if(!plan) return;
+  ensureAudio();
+  try{ wake = await navigator.wakeLock?.request('screen'); }catch{ wake=null; }
+  const phases=[]; phases.push({k:'prep',dur:Math.max(plan.prep,10)});
+  plan.steps.forEach((s,i)=>{ phases.push({k:'apnea',dur:s.apnea,max:s.max,i}); if(s.rest) phases.push({k:'rest',dur:s.rest,i}); });
+  run={phases, pi:0, t0:performance.now(), done:plan.steps.map(()=>null), plan:JSON.parse(JSON.stringify(plan)), startedAt:new Date().toISOString(), confirm:false, lastSec:-1, lastEl:0, feel:0};
+  $('runner').hidden=false; document.body.style.overflow='hidden';
+  enterPhase(); tick();
+});
+function curPhase(){ return run.phases[run.pi]; }
+function enterPhase(){
+  const p=curPhase(); run.t0=performance.now(); run.lastSec=-1; run.lastEl=0; run.confirm=false;
+  $('runner').className='ph-'+p.k;
+  $('rArc').setAttribute('stroke', p.k==='apnea'?'var(--deep)':'var(--breath)');
+  const n=run.plan.steps.length;
+  $('rStep').textContent = p.k==='prep' ? 'Respiration libre' : `Apnée ${p.i+1} / ${n}`;
+  $('rPhase').textContent = p.k==='apnea' ? (p.max?'Apnée maximale':'Apnée') : p.k==='rest' ? 'Respire' : 'Respiration calme';
+  const nx=run.phases[run.pi+1];
+  $('rNext').textContent = nx ? (nx.k==='apnea' ? 'Ensuite : apnée '+(nx.max?'maximale':fmt(nx.dur)) : 'Ensuite : repos '+fmt(nx.dur)) : 'Dernière étape';
+  $('rDots').innerHTML=run.plan.steps.map((_,i)=>`<i class="${run.done[i]!=null?'done':(p.i===i&&p.k==='apnea'?'cur':'')}"></i>`).join('');
+  renderActions();
+  if(p.k==='apnea') snd.apneaStart(); else if(p.k==='rest') snd.apneaEnd();
+}
+function renderActions(){
+  const p=curPhase(), a=$('rActions');
+  if(run.confirm){ a.innerHTML=`<div class="confirm"><strong>Arrêter la séance ?</strong><span class="status">Les apnées déjà faites seront enregistrées.</span><div class="row"><button class="btn-danger" id="cYes">Arrêter</button><button class="btn-ghost" id="cNo">Continuer</button></div></div>`;
+    $('cYes').onclick=()=>finish(false); $('cNo').onclick=()=>{ run.confirm=false; renderActions(); }; return; }
+  if(p.k==='apnea') { a.innerHTML=`<button class="btn-breathe btn-wide" id="rBreathe">${p.max?'Je respire, stop':'Je respire (arrêt anticipé)'}</button>`; $('rBreathe').onclick=()=>endApnea(true); }
+  else a.innerHTML=`<button class="btn-ghost btn-wide" id="rSkip">${p.k==='prep'?'Je suis prêt, commencer':'Passer le repos'}</button>`, $('rSkip').onclick=nextPhase;
+}
+function elapsed(){ return (performance.now()-run.t0)/1000; }
+function endApnea(early){
+  const p=curPhase(); const e=Math.round(elapsed());
+  run.done[p.i] = early ? Math.min(e, p.max ? e : p.dur) : p.dur;
+  if (early && !p.max && e < p.dur) run.done[p.i]=e;
+  nextPhase();
+}
+function nextPhase(){ run.pi++; if(run.pi>=run.phases.length) return finish(true); enterPhase(); }
+function tick(){
+  if(!run) return;
+  const p=curPhase(); if(!p) return;
+  const e=elapsed(); const C=339.3;
+  const el=Math.floor(e);
+  if(el!==run.lastEl){ run.lastEl=el; if(el>0 && el%60===0 && (p.max || el<p.dur)) (p.k==='apnea'?snd.minApnea:snd.minBreath)(); }
+  if(p.k==='apnea' && p.max){
+    $('rClock').textContent=fmt(e); const ref=Math.max(profile?.record||0,bestEver());
+    $('rSub').textContent = ref ? (e>ref?'Nouveau record !':'Record : '+fmt(ref)) : 'chrono libre';
+    $('rArc').setAttribute('stroke-dashoffset', ref ? C*(1-Math.min(1,e/ref)) : C*(1-(e%60)/60));
+  } else {
+    const left=p.dur-e; $('rClock').textContent=fmt(Math.ceil(left));
+    $('rSub').textContent = p.k==='apnea' ? 'sur '+fmt(p.dur) : 'restant';
+    $('rArc').setAttribute('stroke-dashoffset', C*(1-Math.min(1,e/p.dur)));
+    const sec=Math.ceil(left);
+    if(sec!==run.lastSec){ const first=run.lastSec===-1; run.lastSec=sec; const nx=run.phases[run.pi+1];
+      if(p.k!=='apnea' && nx && nx.k==='apnea'){ if(sec===10 || (first && sec<10)) snd.warn10(); else if(!first && sec<=3 && sec>0) snd.count(); } }
+    if(left<=0){ if(p.k==='apnea') endApnea(false); else nextPhase(); }
+  }
+  raf=requestAnimationFrame(tick);
+}
+$('rStop').addEventListener('click',()=>{ if(!run) return; if(run.pi>=run.phases.length){ closeRunner(); return; } run.confirm=true; renderActions(); });
+function finish(completed){
+  const p=curPhase();
+  if(p && p.k==='apnea' && run.done[p.i]==null){ run.done[p.i]=Math.round(elapsed()); }
+  cancelAnimationFrame(raf); run.pi=run.phases.length; run.completed=completed;
+  try{ wake?.release?.(); }catch{} wake=null;
+  beep(784,.15); setTimeout(()=>beep(1046,.3),180);
+  const done=run.done.filter(x=>x!=null), best=done.length?Math.max(...done):0, prevBest=Math.max(profile?.record||0,bestEver());
+  $('runner').className='';
+  $('rStep').textContent='Séance terminée'; $('rStop').textContent='Fermer';
+  $('rMain').innerHTML=`<div class="phase">${completed?'Bravo !':'Séance arrêtée'}</div>
+    <div class="ring" style="width:min(56vw,200px)"><div class="clock" style="position:static;height:100%"><span>Meilleure apnée</span><strong>${fmt(best)}</strong><span>${best>prevBest&&prevBest?'Nouveau record ! (avant '+fmt(prevBest)+')':(prevBest?'Record : '+fmt(Math.max(prevBest,best)):'')}</span></div></div>
+    <div class="sum">${run.plan.steps.map((s,i)=>`<div class="srow"><span>Apnée ${i+1}</span><span>${run.done[i]!=null?fmt(run.done[i]):'–'} / ${s.max?'max':fmt(s.apnea)}</span></div>`).join('')}</div>
+    <div class="field" style="width:100%;max-width:420px"><span class="label">Ressenti</span><div class="feel" id="feel">${[1,2,3,4,5].map(n=>`<button aria-pressed="false" data-v="${n}">${n}</button>`).join('')}</div></div>
+    <div class="field" style="width:100%;max-width:420px;text-align:left"><label for="rNote">Note</label><textarea id="rNote" rows="2" maxlength="300" placeholder="Contractions à 2:10, bonne détente…"></textarea></div>`;
+  $('feel').querySelectorAll('button').forEach(b=>b.onclick=()=>{ run.feel=+b.dataset.v; $('feel').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
+  $('rActions').innerHTML = done.length ? `<button class="btn btn-wide" id="rSave">Enregistrer dans l'historique</button><button class="btn-ghost btn-wide" id="rDiscard">Ne pas enregistrer</button>` : `<button class="btn-ghost btn-wide" id="rDiscard">Fermer</button>`;
+  $('rDiscard').onclick=closeRunner;
+  if($('rSave')) $('rSave').onclick=async ()=>{
+    $('rSave').disabled=true; $('rSave').textContent='Enregistrement…';
+    const type=[...document.querySelectorAll('#presets .chip')].find(c=>c.getAttribute('aria-pressed')==='true')?.textContent||'Personnalisée';
+    const s={date:run.startedAt, type, plan:run.plan.steps, done:run.done, best, completed, feel:run.feel||null, note:($('rNote').value||'').trim().slice(0,300)};
+    try{ const o=await store.addSession(accId,s); sessions.push(o); closeRunner(); toast('Séance enregistrée'); showTab('hist'); }
+    catch{ $('rSave').disabled=false; $('rSave').textContent='Réessayer'; toast("L'enregistrement a échoué, réessaie."); }
+  };
+}
+function closeRunner(){
+  cancelAnimationFrame(raf); try{ wake?.release?.(); }catch{} wake=null; run=null;
+  $('runner').hidden=true; document.body.style.overflow='';
+  // restaure la structure du chrono
+  $('rStop').textContent='Arrêter';
+  $('rMain').innerHTML=`<div class="phase" id="rPhase"></div><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="var(--line)" stroke-width="7"/><circle id="rArc" cx="60" cy="60" r="54" fill="none" stroke="var(--deep)" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/></svg><div class="clock"><strong id="rClock">0:00</strong><span id="rSub"></span></div></div><div class="next" id="rNext"></div><div class="dots" id="rDots"></div>`;
+  buildPlan();
+}
+
+/* ---------- Historique ---------- */
+const dFmt = iso => new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+function renderHist(){
+  const list=[...sessions].filter(s=>s.best>0).sort((a,b)=>a.date.localeCompare(b.date));
+  let rec=0; const recs=list.map(s=>{ const isRec=s.best>rec; rec=Math.max(rec,s.best); return {...s,rec,isRec}; });
+  const total=list.reduce((t,s)=>t+(s.done||[s.best]).reduce((a,b)=>a+(b||0),0),0);
+  const goal=profile?.goal;
+  $('stats').innerHTML = `<div class="stat hero"><span class="label">Record personnel</span><strong>${rec?fmt(rec):'–'}</strong><span>${goal? (rec>=goal?'Objectif '+fmt(goal)+' atteint':'Objectif '+fmt(goal)+(rec?' · encore '+fmt(goal-rec):'')) : (rec?'établi le '+dFmt(recs.filter(r=>r.isRec).pop().date):'Fais ta première séance')}</span></div>
+    <div class="stat"><span class="label">Séances</span><strong>${list.length}</strong></div>
+    <div class="stat"><span class="label">Temps en apnée</span><strong>${fmt(total)}</strong></div>`;
+  drawChart(recs, goal);
+  $('hist').innerHTML = list.length ? [...recs].reverse().map(s=>`<div class="hrow">
+      <div><div class="d">${dFmt(s.date)}${s.isRec?'<span class="pill">record</span>':''}</div>
+      <div class="m">${esc(s.type||'')}${s.done&&s.done.length>1?' · '+s.done.filter(x=>x!=null).map(fmt).join(' / '):''}${s.feel?' · ressenti '+s.feel+'/5':''}${s.note?' · '+esc(s.note):''}</div></div>
+      <div class="b">${fmt(s.best)}</div>
+      <button class="x" data-del="${esc(s.id)}">Supprimer</button></div>`).join('')
+    : `<div class="empty panel"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 50h48M12 42l12-12 10 7 18-20"/><circle cx="52" cy="17" r="3"/></svg><p>Tes séances apparaîtront ici avec ta courbe de record.<br>Lance une séance dans l'onglet Séance, ou ajoute un essai ci-dessus.</p></div>`;
+  $('hist').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(b.dataset.armed){ store.delSession(accId,b.dataset.del).then(()=>{ sessions=sessions.filter(x=>x.id!==b.dataset.del); renderHist(); toast('Séance supprimée'); }).catch(()=>toast('La suppression a échoué.')); }
+    else { b.dataset.armed='1'; b.textContent='Confirmer la suppression'; b.style.color='var(--danger)'; setTimeout(()=>{ if(b.isConnected){ delete b.dataset.armed; b.textContent='Supprimer'; b.style.color=''; } },4000); }
+  });
+}
+function drawChart(pts, goal){
+  const box=$('chart');
+  if(pts.length<1){ box.innerHTML='<p class="status" style="margin:0">La courbe s\'affiche dès ta première séance enregistrée.</p>'; return; }
+  const W=Math.max(320, Math.min(640, box.clientWidth||600)), H=230, L=46, R=14, T=14, B=34;
+  const t=pts.map(p=>+new Date(p.date)); let t0=Math.min(...t), t1=Math.max(...t); if(t1-t0<864e5){ t0-=864e5*1.5; t1+=864e5*1.5; }
+  const vmax=Math.max(...pts.map(p=>p.best), goal||0);
+  const step=[15,30,60,120,300].find(s=>vmax/s<=6)||600; const ymax=Math.ceil(vmax*1.08/step)*step || step;
+  const x=v=>L+(v-t0)/(t1-t0)*(W-L-R), y=v=>T+(1-v/ymax)*(H-T-B);
+  let g='';
+  for(let v=0; v<=ymax; v+=step){ g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="JetBrains Mono,monospace">${fmt(v)}</text>`; }
+  const nt=Math.min(4,Math.max(2,pts.length)); for(let i=0;i<nt;i++){ const v=t0+(t1-t0)*i/(nt-1); g+=`<text x="${x(v)}" y="${H-10}" text-anchor="${i===0?'start':i===nt-1?'end':'middle'}" font-size="11" fill="var(--muted)">${new Date(v).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</text>`; }
+  if(goal){ g+=`<line x1="${L}" x2="${W-R}" y1="${y(goal)}" y2="${y(goal)}" stroke="var(--ok)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${W-R}" y="${y(goal)-6}" text-anchor="end" font-size="11" fill="var(--ok)">objectif ${fmt(goal)}</text>`; }
+  // courbe en marches du record
+  let d=''; pts.forEach((p,i)=>{ const X=x(+new Date(p.date)), Y=y(p.rec); d+= i? ` H${X} V${Y}` : `M${X} ${Y}`; }); d+=` H${W-R}`;
+  const area=d+` V${y(0)} H${x(+new Date(pts[0].date))} Z`;
+  g+=`<path d="${area}" fill="var(--deep)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--deep)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  pts.forEach(p=>{ const X=x(+new Date(p.date)); g+= p.isRec ? `<circle cx="${X}" cy="${y(p.best)}" r="5" fill="var(--deep)" stroke="var(--surface)" stroke-width="2"><title>${dFmt(p.date)} : ${fmt(p.best)} (record)</title></circle>` : `<circle cx="${X}" cy="${y(p.best)}" r="4" fill="var(--breath)"><title>${dFmt(p.date)} : ${fmt(p.best)}</title></circle>`; });
+  const last=pts[pts.length-1]; const lx=Math.min(x(+new Date(last.date)), W-R-30);
+  g+=`<text x="${lx}" y="${Math.max(T+10,y(last.rec)-10)}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--deep)" font-family="JetBrains Mono,monospace">${fmt(last.rec)}</text>`;
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du record d'apnée">${g}</svg>`;
+}
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(currentTab==='hist') renderHist(); },150); });
+$('aDate').value=new Date().toISOString().slice(0,10);
+$('addForm').addEventListener('submit', async e=>{
+  e.preventDefault(); const v=parseT($('aTime').value), dt=$('aDate').value; $('aErr').hidden=true;
+  if(!(v>0) || !dt){ $('aErr').textContent='Indique une date et une durée en minutes:secondes, par exemple 3:30.'; $('aErr').hidden=false; return; }
+  const s={date:new Date(dt+'T12:00:00').toISOString(), type:'Essai hors appli', plan:[], done:[v], best:v, completed:true, feel:null, note:''};
+  try{ const o=await store.addSession(accId,s); sessions.push(o); $('aTime').value=''; renderHist(); toast('Essai ajouté'); }catch{ $('aErr').textContent="L'ajout a échoué, réessaie."; $('aErr').hidden=false; }
+});
+
+/* ---------- Démarrage ---------- */
+(async ()=>{
+  await store.init();
+  try{ accounts=(await store.listAccounts())||[]; }catch{ accounts=[]; }
+  applyPreset('prog');
+  const cur=accounts.find(a=>a.id===lsGet(LS_CUR));
+  if(cur && !cur.pin){ accId=cur.id; profile=cur; try{ sessions=(await store.listSessions(cur.id))||[]; }catch{ sessions=[]; } renderAccounts(); applyPreset('prog'); showTab('seance'); }
+  else { renderAccounts(); showTab('profil'); if(cur) pickAccount(cur.id); }
+})();
+})();
+</script>
+
+</body></html>
