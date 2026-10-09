@@ -55,7 +55,7 @@ button{font:inherit;cursor:pointer;border-radius:999px;border:1px solid transpar
 .warn{font-size:.88rem;color:var(--danger)}
 /* Tab bar */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
-nav.tabs .in{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;max-width:640px}
+nav.tabs .in{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:100%;max-width:640px}
 nav.tabs button{background:transparent;color:var(--muted);border-radius:12px;padding:8px 4px;display:grid;justify-items:center;gap:2px;font-size:.8rem}
 nav.tabs button svg{width:22px;height:22px}
 nav.tabs button[aria-selected="true"]{color:var(--deep);background:var(--deep-soft)}
@@ -117,6 +117,27 @@ nav.tabs button:disabled{opacity:.4;cursor:not-allowed}
 .feel button[aria-pressed="true"]{background:var(--deep);color:var(--surface);border-color:var(--deep)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.9rem;z-index:30}
 .status{font-size:.8rem;color:var(--muted)}
+.sel{font:inherit}
+.seg{display:flex;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{flex:1;background:transparent;color:var(--muted);padding:7px 10px;font-size:.88rem}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tickets{display:grid;gap:10px}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px;min-width:0}
+.ticket.st-done{opacity:.7}
+.ticket.st-done .tk-title{text-decoration:line-through}
+.tk-top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tk-st{margin-left:auto;font-size:.82rem;font-weight:700;color:var(--muted)}
+.tk-title{font-weight:700;font-size:1.02rem;overflow-wrap:anywhere}
+.tk-body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem}
+.tk-acts{display:flex;gap:6px;flex-wrap:wrap}
+.tk-acts button{padding:6px 12px;font-size:.82rem}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.tag.idee{background:var(--breath-soft);color:var(--ink);border-color:transparent}
+.tag.tache{background:var(--deep-soft);color:var(--ink);border-color:transparent}
+.tag.probleme,.tag.haute{background:transparent;color:var(--danger);border-color:var(--danger)}
+.empty-t{text-align:center;padding:24px 12px;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+.empty-t strong{display:block;color:var(--ink);margin-bottom:4px}
+
 .or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface)}
@@ -274,12 +295,35 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
     <div><span class="label">Séances</span></div>
     <div class="hist" id="hist"></div>
   </section>
+
+  <!-- NOTES (tickets) -->
+  <section id="tab-notes" class="stack" hidden>
+    <div><h2>Notes</h2><p class="lead">Une idée, une chose à corriger, un problème dans l'appli ? Écris un ticket. Tous les inscrits voient les tickets.</p></div>
+    <form id="ntForm" class="panel stack" autocomplete="off" novalidate>
+      <span class="label" id="ntTitle">Nouveau ticket</span>
+      <div class="field"><label for="ntSubject">Titre (onglet concerné)</label><select id="ntSubject"><option value="" disabled selected>Choisis un onglet…</option><option>Compte</option><option>Séance</option><option>Chrono et bips</option><option>Historique</option><option>Notes</option><option value="Tous">Tous (toute l'appli)</option></select></div>
+      <div class="field"><label for="ntBody">Détails</label><textarea id="ntBody" rows="3" maxlength="2000" placeholder="Facultatif"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label for="ntCat">Catégorie</label><select id="ntCat"><option value="idee">Idée</option><option value="tache">À faire</option><option value="probleme">Problème</option><option value="info">Info</option></select></div>
+        <div class="field"><label for="ntPrio">Priorité</label><select id="ntPrio"><option value="1">Normale</option><option value="2">Haute</option><option value="0">Basse</option></select></div>
+      </div>
+      <p class="status" id="ntAuthor" style="margin:0"></p>
+      <p class="warn" id="ntErr" hidden></p>
+      <div class="row"><button class="btn" type="submit" id="ntSubmit">Créer le ticket</button><button class="btn-ghost" type="button" id="ntCancel" hidden>Annuler la modification</button></div>
+    </form>
+    <div class="row" style="justify-content:space-between"><span class="label">Tickets</span><span class="status" id="ntCount"></span></div>
+    <div class="seg" id="ntFilter" role="tablist"><button type="button" data-f="open" aria-selected="true">En cours</button><button type="button" data-f="done" aria-selected="false">Résolus</button><button type="button" data-f="all" aria-selected="false">Tous</button></div>
+    <button class="btn-ghost" type="button" id="ntCopy" style="justify-self:start">Copier les tickets en cours</button>
+    <div id="ntList" class="tickets"></div>
+  </section>
+
 </div>
 
 <nav class="tabs" aria-label="Onglets"><div class="in" role="tablist">
   <button role="tab" id="t-profil" data-tab="profil" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profil</button>
   <button role="tab" id="t-seance" data-tab="seance" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M10 2h4"/></svg>Séance</button>
   <button role="tab" id="t-hist" data-tab="hist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg>Historique</button>
+  <button role="tab" id="t-notes" data-tab="notes" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 11h6M9 15h6M9 7h3"/></svg>Notes</button>
 </div></nav>
 
 <div id="runner" hidden>
@@ -369,12 +413,13 @@ const initials=n=>(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).
 function showTab(t){
   if (!profile && t!=='profil') t='profil';
   currentTab=t;
-  for (const k of ['profil','seance','hist']){ $('tab-'+k).hidden = k!==t; $('t-'+k).setAttribute('aria-selected', k===t); }
+  for (const k of ['profil','seance','hist','notes']){ $('tab-'+k).hidden = k!==t; $('t-'+k).setAttribute('aria-selected', k===t); }
   if (t==='hist') renderHist();
+  if (t==='notes') renderNotes();
   window.scrollTo(0,0);
 }
 document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
-function lockTabs(){ $('t-seance').disabled = !profile; $('t-hist').disabled = !profile; }
+function lockTabs(){ $('t-seance').disabled = !profile; $('t-hist').disabled = !profile; $('t-notes').disabled = !profile; }
 $('who').addEventListener('click',()=>showTab('profil'));
 
 /* ---------- Écrans du compte ---------- */
@@ -473,7 +518,72 @@ function askDel(){
     try{ await store.deleteAll(); await auth.currentUser.delete(); toast('Compte supprimé'); }
     catch(e){ $('delErr').textContent=fbMsg(e); $('delErr').hidden=false; $('delYes').disabled=false; } };
 }
+/* ---------- Notes (tickets) : partagés entre tous les inscrits ---------- */
+const NCAT={idee:'Idée',tache:'À faire',probleme:'Problème',info:'Info'};
+const NSTAT={open:'Ouvert',doing:'En cours',done:'Résolu'};
+let NOTES=new Map(), ntUnsub=null, ntReady=false, ntFilter='open', ntEditing=null, armedNt=null;
+const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const ntCol=()=>fdb.collection('tickets');
+function ntListen(on){
+  if(ntUnsub){ ntUnsub(); ntUnsub=null; } NOTES=new Map(); ntReady=false;
+  if(!on) return;
+  ntUnsub=ntCol().onSnapshot(q=>{ const m=new Map(); q.forEach(d=>{ const x=d.data(); if(x&&x.kind==='note') m.set(d.id,x); }); NOTES=m; ntReady=true; if(currentTab==='notes') renderNotes(); },
+    e=>{ ntReady=true; console.error(e); $('ntList').innerHTML='<div class="empty-t"><strong>Notes indisponibles</strong>'+esc(fbMsg(e))+'</div>'; });
+}
+$('ntFilter').addEventListener('click',e=>{ const b=e.target.closest('button[data-f]'); if(!b) return; ntFilter=b.dataset.f; [...$('ntFilter').children].forEach(x=>x.setAttribute('aria-selected',x===b)); renderNotes(); });
+function ntSubjectSet(t){ const sel=$('ntSubject'); sel.querySelectorAll('option[data-legacy]').forEach(o=>o.remove());
+  if(t&&![...sel.options].some(o=>o.value===t)){ const o=document.createElement('option'); o.textContent=t; o.dataset.legacy='1'; sel.appendChild(o); }
+  sel.value=t||''; }
+function ntReset(){ ntEditing=null; $('ntForm').reset(); ntSubjectSet(''); $('ntErr').hidden=true; $('ntTitle').textContent='Nouveau ticket'; $('ntSubmit').textContent='Créer le ticket'; $('ntCancel').hidden=true; }
+$('ntCancel').addEventListener('click',()=>{ ntReset(); renderNotes(); });
+$('ntForm').addEventListener('submit',async e=>{
+  e.preventDefault(); $('ntErr').hidden=true;
+  const title=$('ntSubject').value.trim();
+  if(!title){ $('ntErr').textContent='Choisis l\'onglet concerné.'; $('ntErr').hidden=false; return; }
+  const base={kind:'note',title,body:$('ntBody').value.trim(),cat:$('ntCat').value,prio:+$('ntPrio').value,updated:new Date().toISOString()};
+  try{
+    if(ntEditing){ const old=NOTES.get(ntEditing)||{}; await queued(ntCol().doc(ntEditing).set({...old,...base})); toast('Ticket modifié'); }
+    else { await queued(ntCol().doc('n-'+rid()).set({...base,status:'open',at:new Date().toISOString(),author:profile?.name||'',authorId:user.uid})); toast('Ticket créé'); }
+    ntReset(); renderNotes();
+  }catch(err){ $('ntErr').textContent=fbMsg(err); $('ntErr').hidden=false; }
+});
+$('ntList').addEventListener('click',async e=>{
+  const b=e.target.closest('button'); if(!b||b.disabled) return; const id=b.dataset.nid; const n=NOTES.get(id); if(!n) return;
+  try{
+    if(b.dataset.st){ await queued(ntCol().doc(id).set({...n,status:b.dataset.st,updated:new Date().toISOString()})); return; }
+    if(b.dataset.nact==='edit'){ ntEditing=id; ntSubjectSet(n.title||''); $('ntBody').value=n.body||''; $('ntCat').value=n.cat||'idee'; $('ntPrio').value=String(n.prio??1);
+      $('ntTitle').textContent='Modifier le ticket'; $('ntSubmit').textContent='Enregistrer'; $('ntCancel').hidden=false; window.scrollTo({top:0}); $('ntSubject').focus(); return; }
+    if(b.dataset.nact==='del'){ if(armedNt!==id){ armedNt=id; renderNotes(); setTimeout(()=>{ if(armedNt===id){ armedNt=null; renderNotes(); } },3000); return; }
+      armedNt=null; await queued(ntCol().doc(id).delete()); toast('Ticket supprimé'); }
+  }catch(err){ fbWarn(err); }
+});
+$('ntCopy').addEventListener('click',async()=>{
+  const l=[...NOTES.values()].filter(n=>n.status!=='done').sort((a,b)=>((b.prio??1)-(a.prio??1))||(a.at||'').localeCompare(b.at||''));
+  if(!l.length){ toast('Aucun ticket en cours.'); return; }
+  const txt='Tickets Apnée RottweilerT en cours ('+l.length+') :\n\n'+l.map((n,i)=>`${i+1}. [${NCAT[n.cat]||'Note'}${n.prio===2?', priorité haute':''}] ${n.title}${n.body?'\n   '+n.body.replace(/\n/g,'\n   '):''}\n   (${n.author||'Anonyme'}, ${NSTAT[n.status]||'Ouvert'})`).join('\n\n');
+  try{ await navigator.clipboard.writeText(txt); toast('Tickets copiés : colle-les dans ta conversation avec Claude'); }
+  catch(err){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast('Tickets copiés'); }catch(_){ toast('Copie impossible sur ce téléphone.'); } ta.remove(); }
+});
+function renderNotes(){
+  $('ntAuthor').textContent=profile?'Signé : '+profile.name:'';
+  const all=[...NOTES.entries()].map(([id,n])=>({id,...n})).sort((a,b)=>((b.status!=='done')-(a.status!=='done'))||((b.prio??1)-(a.prio??1))||(b.at||'').localeCompare(a.at||''));
+  const list=all.filter(n=>ntFilter==='all'||(ntFilter==='done'?n.status==='done':n.status!=='done'));
+  const nOpen=all.filter(n=>n.status!=='done').length;
+  $('ntCount').textContent=nOpen+' en cours · '+(all.length-nOpen)+' résolu'+(all.length-nOpen>1?'s':'');
+  const el=$('ntList');
+  if(!ntReady){ el.innerHTML='<div class="empty-t">Chargement des tickets…</div>'; return; }
+  if(!list.length){ el.innerHTML=`<div class="empty-t">${all.length?'Aucun ticket dans ce filtre.':'<strong>Aucun ticket</strong>Écris le premier : une idée, une chose à faire, un problème…'}</div>`; return; }
+  el.innerHTML=list.map(n=>{ const d=n.at?new Date(n.at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
+    return `<div class="ticket st-${esc(n.status||'open')}">
+      <div class="tk-top"><span class="tag ${esc(n.cat||'info')}">${NCAT[n.cat]||'Note'}</span>${n.prio===2?'<span class="tag haute">Priorité haute</span>':n.prio===0?'<span class="tag">Basse</span>':''}<span class="tk-st">${NSTAT[n.status]||'Ouvert'}</span></div>
+      <div class="tk-title">${esc(n.title)}</div>
+      ${n.body?`<p class="tk-body">${esc(n.body)}</p>`:''}
+      <p class="status" style="margin:0">${esc(n.author||'Anonyme')} · ${esc(d)}</p>
+      <div class="tk-acts">${['open','doing','done'].filter(k=>k!==(n.status||'open')).map(k=>`<button class="btn-ghost" type="button" data-st="${k}" data-nid="${esc(n.id)}">${k==='done'?'Marquer résolu':k==='doing'?'Passer en cours':'Rouvrir'}</button>`).join('')}<button class="btn-ghost" type="button" data-nact="edit" data-nid="${esc(n.id)}">Modifier</button><button class="${armedNt===n.id?'btn-danger':'btn-ghost'}" type="button" data-nact="del" data-nid="${esc(n.id)}">${armedNt===n.id?'Confirmer ?':'Supprimer'}</button></div>
+    </div>`; }).join('');
+}
 async function onUser(u){
+  ntListen(!!u); ntReset();
   user=u; profile=null; sessions=[]; accId=u?u.uid:null;
   if(!u){ $('lPass').value=''; lMsg(null); renderAccounts(); showTab('profil'); return; }
   $('who').textContent='Chargement…';

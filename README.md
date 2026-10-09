@@ -9,3 +9,5 @@ Site : https://rottweilert.github.io/Apnee/
 - `firestore.rules` : règles de sécurité à coller dans Firestore (onglet Règles). Chacun ne lit et n'écrit que ses propres données.
 - Hors ligne : `sw.js` garde le site sur l'appareil ; Firestore garde les séances en attente et les envoie au retour du réseau.
 - Les séances enregistrées dans le navigateur par l'ancienne version peuvent être importées depuis l'onglet Compte.
+- Onglet Notes : tickets (idées, tâches, problèmes) partagés entre tous les inscrits, enregistrés dans la collection Firestore `tickets` avec `kind: "note"`.
+- `.github/workflows/export-tickets.yml` : copie les tickets dans `tickets/tickets.json` toutes les heures (et à la demande). Lancée avec l'entrée « resoudre » (identifiants séparés par des virgules), elle passe d'abord ces tickets en Résolu.

@@ -5,5 +5,19 @@ service cloud.firestore {
     match /users/{uid}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
+    // Tickets (onglet Notes) : lisibles par tous, écrits par les inscrits.
+    // Sans connexion, seul le statut peut changer (export GitHub qui passe des tickets en Résolu).
+    match /tickets/{id} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && request.resource.data.kind == 'note'
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
+        && request.resource.data.body is string && request.resource.data.body.size() <= 2000;
+      allow update: if request.auth == null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updated'])
+        && request.resource.data.status in ['open', 'doing', 'done'];
+      allow delete: if request.auth != null;
+    }
   }
 }
