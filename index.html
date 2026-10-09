@@ -117,6 +117,13 @@ nav.tabs button:disabled{opacity:.4;cursor:not-allowed}
 .feel button[aria-pressed="true"]{background:var(--deep);color:var(--surface);border-color:var(--deep)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.9rem;z-index:30}
 .status{font-size:.8rem;color:var(--muted)}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface)}
+.linkbtn{background:none;border:none;padding:0;color:var(--deep);font-weight:400;text-decoration:underline;justify-self:start;font-size:.9rem}
+.okmsg{font-size:.88rem;color:var(--ok);margin:0}
+.warn{margin:0}
+
 .accs{display:grid;gap:8px}
 .acc{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--ink);font-weight:400}
 .acc[aria-pressed="true"]{border-color:var(--deep);background:var(--deep-soft)}
@@ -146,30 +153,29 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
     <!-- Connexion -->
     <div id="authView" class="stack">
       <div>
-        <h2>Qui s'entraîne ?</h2>
-        <p class="lead">Choisis ton compte pour retrouver tes séances et ta progression. Chaque personne a son propre historique.</p>
+        <h2>Connexion</h2>
+        <p class="lead">Connecte-toi pour retrouver tes séances et ta progression sur tous tes appareils. Chaque personne a son propre compte et son propre historique.</p>
       </div>
-      <div class="accs" id="accList"></div>
-      <form id="pinBox" class="panel stack" hidden novalidate>
-        <div class="field"><label for="pinIn" id="pinLabel">Code</label><input id="pinIn" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>
-        <p class="warn" id="pinErr" hidden></p>
-        <div class="row"><button class="btn" type="submit">Se connecter</button><button class="btn-ghost" type="button" id="pinCancel">Annuler</button></div>
+      <form id="loginForm" class="panel stack" novalidate>
+        <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="email" inputmode="email" placeholder="prenom@exemple.fr"></div>
+        <div class="field"><label for="lPass">Mot de passe</label><input id="lPass" type="password" autocomplete="current-password"><small>6 caractères minimum</small></div>
+        <p class="warn" id="lErr" hidden></p>
+        <p class="okmsg" id="lOk" hidden></p>
+        <div class="row"><button class="btn" type="submit" id="lLogin">Se connecter</button><button class="btn-ghost" type="button" id="lSignup">Créer un compte</button></div>
+        <button class="linkbtn" type="button" id="lReset">Mot de passe oublié ?</button>
       </form>
-      <button class="btn-ghost btn-wide" id="newAcc" type="button">+ Créer un compte</button>
+      <div class="or"><span>ou</span></div>
+      <button class="btn-ghost btn-wide gbtn" type="button" id="lGoogle"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.6 3.9-5.5 3.9-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.3 14.6 2.3 12 2.3 6.7 2.3 2.4 6.6 2.4 12s4.3 9.7 9.6 9.7c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6H12z"/></svg>Continuer avec Google</button>
     </div>
 
-    <!-- Inscription / modification -->
+    <!-- Profil : création / modification -->
     <div id="formView" class="stack" hidden>
       <div>
-        <h2 id="pTitle">Inscription</h2>
-        <p class="lead" id="pLead">Crée ton compte d'apnéiste. Ton prénom ou ton pseudo apparaît sur ton profil, et tes séances restent séparées de celles des autres.</p>
+        <h2 id="pTitle">Ton profil</h2>
+        <p class="lead" id="pLead">Dernière étape : indique ton prénom ou ton pseudo. Ton record et ton objectif servent de repères dans les séances.</p>
       </div>
       <form id="pForm" class="panel stack" novalidate>
-        <div class="field"><label for="pName">Prénom ou pseudo</label><input id="pName" required maxlength="40" placeholder="Armand" autocomplete="off"></div>
-        <div class="grid2 wrap1">
-          <div class="field"><label for="pPin" id="pPinLabel">Code personnel</label><input id="pPin" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password"><small id="pPinHelp">4 à 8 chiffres, facultatif</small></div>
-          <div class="field"><label for="pPin2">Confirme le code</label><input id="pPin2" class="num pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password"></div>
-        </div>
+        <div class="field"><label for="pName">Prénom ou pseudo</label><input id="pName" required maxlength="40" placeholder="Armand" autocomplete="nickname"></div>
         <div class="field"><label for="pLevel">Niveau</label>
           <select id="pLevel"><option value="debutant">Débutant (moins de 2 min)</option><option value="intermediaire">Intermédiaire (2 à 4 min)</option><option value="confirme">Confirmé (plus de 4 min)</option></select></div>
         <div class="grid2">
@@ -177,7 +183,7 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
           <div class="field"><label for="pGoal">Objectif</label><input id="pGoal" class="num" inputmode="numeric" placeholder="4:00"><small>min:sec</small></div>
         </div>
         <p class="warn" id="pErr" hidden></p>
-        <div class="row"><button class="btn" type="submit" id="pSubmit">Créer mon compte</button><button class="btn-ghost" type="button" id="pCancel">Annuler</button></div>
+        <div class="row"><button class="btn" type="submit" id="pSubmit">Enregistrer</button><button class="btn-ghost" type="button" id="pCancel">Annuler</button></div>
       </form>
     </div>
 
@@ -185,13 +191,18 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
     <div id="acctView" class="stack" hidden>
       <div class="panel acct">
         <div class="avatar" id="aAvatar" aria-hidden="true"></div>
-        <div style="min-width:0"><div class="aname" id="aName"></div><div class="status" id="aMeta"></div></div>
+        <div style="min-width:0"><div class="aname" id="aName"></div><div class="status" id="aMail"></div><div class="status" id="aMeta"></div></div>
       </div>
       <div class="row">
         <button class="btn-ghost" type="button" id="editAcc">Modifier mon profil</button>
-        <button class="btn-ghost" type="button" id="logout">Changer d'utilisateur</button>
+        <button class="btn-ghost" type="button" id="logout">Se déconnecter</button>
       </div>
-      <div id="delZone"><button class="btn-danger" type="button" id="delAcc">Supprimer mon compte</button></div>
+      <div class="panel stack" id="importZone" hidden>
+        <span class="label">Séances gardées sur cet appareil</span>
+        <p class="status" style="margin:0">Ces séances ont été faites avant le passage en ligne. Importe celles qui sont à toi pour les retrouver partout.</p>
+        <div class="accs" id="importList"></div>
+      </div>
+      <div id="delZone"></div>
     </div>
 
     <p class="status" id="pStore"></p>
@@ -284,6 +295,9 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
 </div>
 <div class="toast" id="toast" hidden></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 (() => {
 const $ = id => document.getElementById(id);
@@ -294,43 +308,60 @@ const parseT = v => { v = String(v||'').trim(); if(!v) return null; let neg = fa
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast = msg => { const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2600); };
 
-/* ---------- Stockage : comptes nominatifs, chacun avec son historique ---------- */
-const LS='apnee-rtt-v2', LS_OLD='apnee-rtt-v1', LS_CUR='apnee-rtt-current';
+/* ---------- Comptes en ligne (Firebase) ---------- */
+const FB_CONFIG={apiKey:"AIzaSyC7DGE-qYz-wivF48odsHDy84JyJPkztCE",authDomain:"apnee-rottweilert.firebaseapp.com",projectId:"apnee-rottweilert",storageBucket:"apnee-rottweilert.firebasestorage.app",messagingSenderId:"699675461726",appId:"1:699675461726:web:01af8734518f0b99a04ccf"};
+let auth=null, fdb=null, user=null;
+function initFirebase(){
+  try{ firebase.initializeApp(FB_CONFIG); auth=firebase.auth(); auth.languageCode='fr'; fdb=firebase.firestore();
+    fdb.enablePersistence({synchronizeTabs:true}).catch(()=>{}); return true; }catch(e){ console.error(e); return false; }
+}
+/* Les écritures sont gardées en attente sans réseau : on n'attend la réponse du serveur que peu de temps. */
+const queued=(pr,ms=2500)=>new Promise((res,rej)=>{ let done=false; pr.then(()=>{ if(!done){done=true;res();} },e=>{ if(!done){done=true;rej(e);} else fbWarn(e); }); setTimeout(()=>{ if(!done){done=true;res();} },ms); });
+const FB_ERR={
+  'auth/invalid-email':"Cette adresse email n'est pas valide.",
+  'auth/missing-email':'Indique ton adresse email.',
+  'auth/missing-password':'Indique ton mot de passe.',
+  'auth/user-not-found':'Email ou mot de passe incorrect.','auth/wrong-password':'Email ou mot de passe incorrect.',
+  'auth/invalid-credential':'Email ou mot de passe incorrect.','auth/invalid-login-credentials':'Email ou mot de passe incorrect.',
+  'auth/email-already-in-use':'Un compte existe déjà avec cet email. Appuie sur « Se connecter ».',
+  'auth/weak-password':'Le mot de passe doit faire au moins 6 caractères.',
+  'auth/network-request-failed':'Pas de connexion internet. Réessaie quand tu seras connecté.',
+  'auth/too-many-requests':'Trop de tentatives. Attends quelques minutes puis réessaie.',
+  'auth/operation-not-allowed':"Ce mode de connexion n'est pas encore activé dans Firebase (Authentication, Méthodes de connexion).",
+  'auth/unauthorized-domain':"Ce site n'est pas encore autorisé dans Firebase (Authentication, Paramètres, Domaines autorisés).",
+  'auth/requires-recent-login':'Par sécurité, déconnecte-toi, reconnecte-toi, puis recommence.',
+  'permission-denied':"Le serveur refuse l'accès : les règles de sécurité Firestore ne sont pas encore en place.",
+  'failed-precondition':"La base de données n'est pas encore créée dans Firebase (Firestore Database).",
+  'not-found':"La base de données n'est pas encore créée dans Firebase (Firestore Database).",
+  'unavailable':'Serveur injoignable pour le moment. Tes données seront envoyées dès le retour du réseau.'
+};
+const fbMsg=e=>FB_ERR[e?.code]||FB_ERR[(e?.code||'').replace('firestore/','')]||('Erreur : '+(e?.message||'inconnue'));
+function fbWarn(e){ console.error(e); toast(fbMsg(e)); }
+
+const store={
+  uref(){ return fdb.collection('users').doc(user.uid); },
+  ses(){ return this.uref().collection('sessions'); },
+  async getProfile(){ const s=await this.uref().get(); return s.exists ? s.data() : null; },
+  async saveProfile(p){ return queued(this.uref().set(p,{merge:true})); },
+  async listSessions(){ const q=await this.ses().get(); return q.docs.map(d=>({id:d.id,...d.data()})); },
+  async addSession(_a,s){ const ref=this.ses().doc(); queued(ref.set(s)).catch(fbWarn); return {id:ref.id,...s}; },
+  async delSession(_a,id){ return queued(this.ses().doc(id).delete()); },
+  async importSessions(list){ const b=fdb.batch(); list.forEach(x=>{ const {id,...d}=x; b.set(this.ses().doc(id),d); }); return queued(b.commit(),4000); },
+  async deleteAll(){ const q=await this.ses().get(); for(let i=0;i<q.docs.length;i+=400){ const b=fdb.batch(); q.docs.slice(i,i+400).forEach(d=>b.delete(d.ref)); await b.commit(); } await this.uref().delete(); }
+};
+
+/* Séances gardées dans ce navigateur par l'ancienne version (avant le passage en ligne) */
+const LS='apnee-rtt-v2', LS_OLD='apnee-rtt-v1', LS_IMP='apnee-rtt-imported';
 const lsGet=k=>{ try{ return localStorage.getItem(k); }catch{ return null; } };
 const lsSet=(k,v)=>{ try{ v==null?localStorage.removeItem(k):localStorage.setItem(k,v); }catch{} };
-const local={
-  read(){ let d=null; try{ d=JSON.parse(lsGet(LS)); }catch{}
-    if(!d){ d={accounts:{}}; try{ const o=JSON.parse(lsGet(LS_OLD)); if(o&&o.profile){ d.accounts.profile={...o.profile, sessions:o.sessions||[]}; } }catch{} }
-    return d; },
-  write(d){ lsSet(LS, JSON.stringify(d)); }
-};
-const newId=()=>'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const store={
-  mode:'local', db:null, uid:null,
-  async init(){
-    try{ if(window.claude?.use){ const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
-      if(db&&user){ const id=await user.id(); if(id){ this.db=db; this.uid=id; this.mode='cloud'; } } } }catch{}
-  },
-  fallback(){ if(this.mode==='cloud'){ this.mode='local'; toast("Enregistrement en ligne indisponible : les comptes sont gardés dans ce navigateur."); } },
-  async run(cloudFn, localFn){
-    if(this.mode==='cloud'){ try{ return await cloudFn(); }catch(e){ if(e&&(e.code==='invalid_argument'||e.code==='not_granted'||e.code==='revoked'||e.code==='capability_disabled')){ this.fallback(); return localFn(); } throw e; } }
-    return localFn();
-  },
-  accCol(){ return this.db.collection('data/users/'+this.uid); },
-  sesCol(aid){ return this.accCol().doc(aid).collection('sessions'); },
-  async listAccounts(){ return this.run(async()=>{ const q=await this.accCol().get(); return q.docs.filter(d=>d.data()?.name).map(d=>({id:d.id,...d.data()})); },
-    ()=>Object.entries(local.read().accounts).map(([id,a])=>{ const {sessions,...r}=a; return {id,...r}; })); },
-  async saveAccount(id,a){ return this.run(()=>this.accCol().doc(id).set(a), ()=>{ const d=local.read(); d.accounts[id]={...a, sessions:d.accounts[id]?.sessions||[]}; local.write(d); }); },
-  async deleteAccount(id){ return this.run(async()=>{ const q=await this.sesCol(id).get(); for(const doc of q.docs) await this.sesCol(id).doc(doc.id).delete(); await this.accCol().doc(id).delete(); },
-    ()=>{ const d=local.read(); delete d.accounts[id]; local.write(d); }); },
-  async listSessions(aid){ return this.run(async()=>{ const q=await this.sesCol(aid).get(); return q.docs.map(d=>({id:d.id,...d.data()})); }, ()=>local.read().accounts[aid]?.sessions||[]); },
-  async addSession(aid,s){ return this.run(async()=>{ const ref=this.sesCol(aid).doc(); await ref.set(s); return {id:ref.id,...s}; },
-    ()=>{ const d=local.read(); const o={id:'s'+Date.now().toString(36),...s}; (d.accounts[aid].sessions ||= []).push(o); local.write(d); return o; }); },
-  async delSession(aid,id){ return this.run(()=>this.sesCol(aid).doc(id).delete(), ()=>{ const d=local.read(); const a=d.accounts[aid]; if(a) a.sessions=(a.sessions||[]).filter(x=>x.id!==id); local.write(d); }); }
-};
-async function hashPin(pin, salt){ try{ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt+':'+pin)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch{ return 'p:'+btoa(salt+pin); } }
+function localAccounts(){
+  let d=null; try{ d=JSON.parse(lsGet(LS)); }catch{}
+  if(!d){ d={accounts:{}}; try{ const o=JSON.parse(lsGet(LS_OLD)); if(o&&o.profile) d.accounts.profile={...o.profile,sessions:o.sessions||[]}; }catch{} }
+  return Object.entries(d.accounts||{}).map(([id,a])=>({id,...a,sessions:a.sessions||[]})).filter(a=>a.sessions.length);
+}
+const importedMap=()=>{ try{ return JSON.parse(lsGet(LS_IMP))||{}; }catch{ return {}; } };
 
-let accounts=[], accId=null, profile=null, sessions=[], currentTab='profil', formMode='create', pendingAcc=null;
+let accId=null, profile=null, sessions=[], currentTab='profil';
 const LEVELS={debutant:'débutant',intermediaire:'intermédiaire',confirme:'confirmé'};
 const initials=n=>(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
@@ -346,97 +377,111 @@ document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('clic
 function lockTabs(){ $('t-seance').disabled = !profile; $('t-hist').disabled = !profile; }
 $('who').addEventListener('click',()=>showTab('profil'));
 
-/* ---------- Comptes ---------- */
+/* ---------- Écrans du compte ---------- */
 function view(v){ $('authView').hidden=v!=='auth'; $('formView').hidden=v!=='form'; $('acctView').hidden=v!=='acct'; }
 function renderAccounts(){
   $('who').textContent = profile ? profile.name : 'Se connecter';
   $('t-profil').lastChild.textContent = profile ? 'Compte' : 'Connexion';
-  $('pStore').textContent = store.mode==='cloud'
-    ? 'Les comptes et les séances sont enregistrés sur ton compte Claude, sur tous tes appareils. Personne d\'autre ne les voit.'
-    : 'Les comptes et les séances sont enregistrés dans ce navigateur, sur cet appareil.';
+  $('pStore').textContent = user ? 'Tes séances sont enregistrées en ligne sur ton compte. Tu les retrouves sur tous tes appareils, même après avoir effacé l\'historique du navigateur.' : '';
   lockTabs();
-  if(profile){
-    $('aAvatar').textContent=initials(profile.name); $('aName').textContent=profile.name;
-    const best=bestEver(); $('aMeta').textContent=[LEVELS[profile.level], sessions.length+' séance'+(sessions.length>1?'s':''), best?'record '+fmt(best):null].filter(Boolean).join(' · ');
-    resetDel(); view('acct'); return;
-  }
-  $('pinBox').hidden=true; pendingAcc=null;
-  const list=[...accounts].sort((a,b)=>a.name.localeCompare(b.name,'fr'));
-  $('accList').innerHTML = list.length ? list.map(a=>`<button class="acc" type="button" data-id="${esc(a.id)}" aria-pressed="false">
-      <span class="avatar">${esc(initials(a.name))}</span><span style="min-width:0"><span class="n">${esc(a.name)}</span><span class="m">${esc(LEVELS[a.level]||'')}${a.pin?' · code':''}</span></span>
-      <span class="r">${a.record?fmt(a.record):''}</span></button>`).join('')
-    : '<p class="status" style="margin:0">Aucun compte pour l\'instant. Crée le premier pour commencer.</p>';
-  $('accList').querySelectorAll('.acc').forEach(b=>b.onclick=()=>pickAccount(b.dataset.id));
-  if(!list.length){ openForm('create'); return; }
-  view('auth');
+  if(!user){ view('auth'); return; }
+  if(!profile){ openForm('create'); return; }
+  $('aAvatar').textContent=initials(profile.name); $('aName').textContent=profile.name; $('aMail').textContent=user.email||'';
+  const best=bestEver(); $('aMeta').textContent=[LEVELS[profile.level], sessions.length+' séance'+(sessions.length>1?'s':''), best?'record '+fmt(best):null].filter(Boolean).join(' · ');
+  renderImport(); resetDel(); view('acct');
 }
-function pickAccount(id){
-  const a=accounts.find(x=>x.id===id); if(!a) return;
-  $('accList').querySelectorAll('.acc').forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===id));
-  if(!a.pin){ login(a); return; }
-  pendingAcc=a; $('pinLabel').textContent='Code de '+a.name; $('pinIn').value=''; $('pinErr').hidden=true; $('pinBox').hidden=false; $('pinIn').focus();
+function setBusy(b){ ['lLogin','lSignup','lGoogle','lReset'].forEach(id=>$(id).disabled=b); }
+const lMsg=(m,ok)=>{ $('lErr').hidden=true; $('lOk').hidden=true; if(m){ const el=ok?$('lOk'):$('lErr'); el.textContent=m; el.hidden=false; } };
+async function doAuth(kind){
+  if(!auth){ lMsg('Impossible de joindre le serveur. Vérifie ta connexion internet puis recharge la page.'); return; }
+  const email=$('lEmail').value.trim(), pass=$('lPass').value;
+  lMsg(null);
+  if(kind!=='google' && !email) return lMsg('Indique ton adresse email.');
+  if((kind==='login'||kind==='signup') && pass.length<6) return lMsg('Le mot de passe doit faire au moins 6 caractères.');
+  setBusy(true);
+  try{
+    if(kind==='login') await auth.signInWithEmailAndPassword(email,pass);
+    else if(kind==='signup') await auth.createUserWithEmailAndPassword(email,pass);
+    else if(kind==='reset'){ await auth.sendPasswordResetEmail(email); lMsg('Email envoyé à '+email+'. Suis le lien pour choisir un nouveau mot de passe.',true); }
+    else if(kind==='google'){
+      const prov=new firebase.auth.GoogleAuthProvider(); prov.setCustomParameters({prompt:'select_account'});
+      try{ await auth.signInWithPopup(prov); }
+      catch(e){ if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(e.code)) await auth.signInWithRedirect(prov); else throw e; }
+    }
+  }catch(e){ if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request') lMsg(fbMsg(e)); }
+  finally{ setBusy(false); }
 }
-$('pinBox').addEventListener('submit', async e=>{ e.preventDefault(); if(!pendingAcc) return;
-  const h=await hashPin($('pinIn').value.trim(), pendingAcc.id);
-  if(h!==pendingAcc.pin){ $('pinErr').textContent='Code incorrect. Réessaie.'; $('pinErr').hidden=false; $('pinIn').select(); return; }
-  login(pendingAcc); });
-$('pinCancel').onclick=()=>{ pendingAcc=null; $('pinBox').hidden=true; $('accList').querySelectorAll('.acc').forEach(b=>b.setAttribute('aria-pressed','false')); };
-async function login(a){
-  accId=a.id; profile=a; lsSet(LS_CUR, a.id);
-  try{ sessions=(await store.listSessions(a.id))||[]; }catch{ sessions=[]; toast('Impossible de charger tes séances pour le moment.'); }
-  renderAccounts(); applyPreset('prog'); toast('Bonjour '+a.name+' !'); showTab('seance');
-}
-function logout(){ accId=null; profile=null; sessions=[]; lsSet(LS_CUR,null); renderAccounts(); showTab('profil'); }
-$('logout').onclick=logout;
-$('newAcc').onclick=()=>openForm('create');
+$('loginForm').addEventListener('submit',e=>{ e.preventDefault(); doAuth('login'); });
+$('lSignup').onclick=()=>doAuth('signup');
+$('lReset').onclick=()=>doAuth('reset');
+$('lGoogle').onclick=()=>doAuth('google');
+$('logout').onclick=()=>auth.signOut();
 $('editAcc').onclick=()=>openForm('edit');
-$('pCancel').onclick=()=>{ $('pErr').hidden=true; profile?view('acct'):(accounts.length?view('auth'):null); };
+$('pCancel').onclick=()=>{ $('pErr').hidden=true; if(profile) view('acct'); else auth.signOut(); };
 function openForm(mode){
-  formMode=mode; $('pErr').hidden=true; $('pPin').value=''; $('pPin2').value='';
+  $('pErr').hidden=true;
   const edit=mode==='edit'&&profile;
-  $('pTitle').textContent=edit?'Modifier mon profil':'Inscription';
-  $('pLead').textContent=edit?'Ton record et ton objectif servent de repères dans les séances.':'Crée ton compte d\'apnéiste. Ton prénom ou ton pseudo apparaît sur ton profil, et tes séances restent séparées de celles des autres.';
-  $('pSubmit').textContent=edit?'Enregistrer':'Créer mon compte';
-  $('pPinLabel').textContent=edit?'Nouveau code':'Code personnel';
-  $('pPinHelp').textContent=edit?(profile.pin?'laisse vide pour garder ton code':'4 à 8 chiffres, facultatif'):'4 à 8 chiffres, facultatif';
-  $('pName').value=edit?profile.name:''; $('pLevel').value=edit?(profile.level||'debutant'):'debutant';
-  $('pRecord').value=edit&&profile.record?fmt(profile.record):''; $('pGoal').value=edit&&profile.goal?fmt(profile.goal):'';
-  $('pCancel').hidden = !edit && !accounts.length;
-  view('form'); $('pName').focus();
+  $('pTitle').textContent=edit?'Modifier mon profil':'Ton profil';
+  $('pLead').textContent=edit?'Ton record et ton objectif servent de repères dans les séances.':'Dernière étape : indique ton prénom ou ton pseudo. Ton record et ton objectif servent de repères dans les séances.';
+  $('pCancel').textContent=edit?'Annuler':'Se déconnecter';
+  const src=edit?profile:{name:(user?.displayName||'').split(' ')[0]};
+  $('pName').value=src.name||''; $('pLevel').value=src.level||'debutant';
+  $('pRecord').value=src.record?fmt(src.record):''; $('pGoal').value=src.goal?fmt(src.goal):'';
+  view('form');
 }
 $('pForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const name=$('pName').value.trim().replace(/\s+/g,' '), rec=$('pRecord').value.trim(), goal=$('pGoal').value.trim(), pin=$('pPin').value.trim(), pin2=$('pPin2').value.trim();
+  const name=$('pName').value.trim().replace(/\s+/g,' '), rec=$('pRecord').value.trim(), goal=$('pGoal').value.trim();
   const err=m=>{ $('pErr').textContent=m; $('pErr').hidden=false; };
   $('pErr').hidden=true;
-  const edit=formMode==='edit'&&profile;
   if(!name) return err('Indique ton prénom ou ton pseudo.');
-  if(accounts.some(a=>a.id!==(edit?accId:null) && a.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))) return err('Ce nom est déjà pris. Ajoute une initiale, par exemple « '+name+' B. ».');
-  if(pin && !/^\d{4,8}$/.test(pin)) return err('Le code doit faire 4 à 8 chiffres.');
-  if(pin !== pin2) return err('Les deux codes ne sont pas identiques.');
   const r = rec ? parseT(rec) : null, g = goal ? parseT(goal) : null;
   if (rec && !(r>0)) return err('Record : écris la durée en minutes:secondes, par exemple 2:30.');
   if (goal && !(g>0)) return err('Objectif : écris la durée en minutes:secondes, par exemple 4:00.');
-  const id = edit ? accId : newId();
-  const a = { name, level:$('pLevel').value, record:r||null, goal:g||null,
-    pin: pin ? await hashPin(pin,id) : (edit ? (profile.pin||null) : null),
-    createdAt: edit ? (profile.createdAt||new Date().toISOString()) : new Date().toISOString() };
+  const first=!profile;
+  const a={ name, level:$('pLevel').value, record:r||null, goal:g||null, email:user.email||null, createdAt: profile?.createdAt || new Date().toISOString() };
   $('pSubmit').disabled=true;
   try{
-    await store.saveAccount(id,a);
-    const full={id,...a}; accounts=accounts.filter(x=>x.id!==id).concat(full);
-    if(edit){ profile=full; renderAccounts(); buildPlan(); toast('Profil enregistré'); }
-    else { sessions=[]; await login(full); toast('Compte créé, bienvenue '+name+' !'); }
-  }catch(ex){ err("L'enregistrement a échoué. Vérifie ta connexion et réessaie."); }
+    await store.saveProfile(a); profile=a; renderAccounts(); buildPlan();
+    if(first){ toast('Bienvenue '+name+' !'); showTab(localAccounts().length?'profil':'seance'); } else toast('Profil enregistré');
+  }catch(ex){ err(fbMsg(ex)); }
   finally{ $('pSubmit').disabled=false; }
 });
+function renderImport(){
+  const list=localAccounts(), done=importedMap();
+  $('importZone').hidden=!list.length;
+  $('importList').innerHTML=list.map(a=>`<div class="acc" style="cursor:default"><span class="avatar">${esc(initials(a.name))}</span>
+    <span style="min-width:0"><span class="n">${esc(a.name)}</span><span class="m">${a.sessions.length} séance${a.sessions.length>1?'s':''}</span></span>
+    ${done[a.id]?'<span class="m">Importé</span>':`<button class="btn" type="button" style="padding:8px 14px" data-imp="${esc(a.id)}">Importer</button>`}</div>`).join('');
+  $('importList').querySelectorAll('[data-imp]').forEach(b=>b.onclick=async()=>{
+    const a=list.find(x=>x.id===b.dataset.imp); if(!a) return; b.disabled=true; b.textContent='Import…';
+    const items=a.sessions.map(x=>({...x, id:'loc-'+a.id+'-'+x.id}));
+    try{
+      await store.importSessions(items);
+      const have=new Set(sessions.map(x=>x.id)); items.forEach(x=>{ if(!have.has(x.id)) sessions.push(x); });
+      const m=importedMap(); m[a.id]=Date.now(); lsSet(LS_IMP,JSON.stringify(m));
+      if(a.record && !profile.record){ profile.record=a.record; store.saveProfile({record:a.record}).catch(fbWarn); }
+      toast(items.length+' séance'+(items.length>1?'s':'')+' importée'+(items.length>1?'s':'')); renderAccounts();
+    }catch(e){ fbWarn(e); b.disabled=false; b.textContent='Importer'; }
+  });
+}
 function resetDel(){ $('delZone').innerHTML='<button class="btn-danger" type="button" id="delAcc">Supprimer mon compte</button>'; $('delAcc').onclick=askDel; }
 function askDel(){
-  $('delZone').innerHTML=`<div class="confirm"><strong>Supprimer le compte de ${esc(profile.name)} ?</strong><span class="status">Toutes ses séances seront effacées. C'est définitif.</span><div class="row"><button class="btn-danger" type="button" id="delYes">Supprimer définitivement</button><button class="btn-ghost" type="button" id="delNo">Annuler</button></div></div>`;
+  $('delZone').innerHTML=`<div class="confirm"><strong>Supprimer ton compte ?</strong><span class="status">Ton profil et toutes tes séances seront effacés du serveur. C'est définitif.</span><p class="warn" id="delErr" hidden></p><div class="row"><button class="btn-danger" type="button" id="delYes">Supprimer définitivement</button><button class="btn-ghost" type="button" id="delNo">Annuler</button></div></div>`;
   $('delNo').onclick=resetDel;
-  $('delYes').onclick=async()=>{ $('delYes').disabled=true; try{ await store.deleteAccount(accId); accounts=accounts.filter(x=>x.id!==accId); toast('Compte supprimé'); logout(); }catch{ toast('La suppression a échoué, réessaie.'); resetDel(); } };
+  $('delYes').onclick=async()=>{ $('delYes').disabled=true;
+    try{ await store.deleteAll(); await auth.currentUser.delete(); toast('Compte supprimé'); }
+    catch(e){ $('delErr').textContent=fbMsg(e); $('delErr').hidden=false; $('delYes').disabled=false; } };
 }
-
+async function onUser(u){
+  user=u; profile=null; sessions=[]; accId=u?u.uid:null;
+  if(!u){ $('lPass').value=''; lMsg(null); renderAccounts(); showTab('profil'); return; }
+  $('who').textContent='Chargement…';
+  try{ profile=await store.getProfile(); }catch(e){ profile=null; if(e.code!=='unavailable'){ fbWarn(e); } }
+  if(profile){ try{ sessions=await store.listSessions(); }catch(e){ fbWarn(e); } }
+  renderAccounts(); buildPlan();
+  showTab(profile?(localAccounts().some(a=>!importedMap()[a.id])?'profil':'seance'):'profil');
+}
 /* ---------- Séance : construction ---------- */
 const presets = {
   prog:{a0:'1:00',ad:'1:00',r0:'0:30',rd:'0:30',n:3,prep:'1:00',max:false,info:'Paliers qui s\'allongent : idéal pour monter en durée.'},
@@ -652,14 +697,13 @@ $('addForm').addEventListener('submit', async e=>{
 });
 
 /* ---------- Démarrage ---------- */
-(async ()=>{
-  await store.init();
-  try{ accounts=(await store.listAccounts())||[]; }catch{ accounts=[]; }
-  applyPreset('prog');
-  const cur=accounts.find(a=>a.id===lsGet(LS_CUR));
-  if(cur && !cur.pin){ accId=cur.id; profile=cur; try{ sessions=(await store.listSessions(cur.id))||[]; }catch{ sessions=[]; } renderAccounts(); applyPreset('prog'); showTab('seance'); }
-  else { renderAccounts(); showTab('profil'); if(cur) pickAccount(cur.id); }
-})();
+applyPreset('prog'); renderAccounts();
+if(window.firebase && initFirebase()){
+  auth.getRedirectResult().catch(e=>{ if(e.code) lMsg(fbMsg(e)); });
+  auth.onAuthStateChanged(onUser);
+} else {
+  lMsg('Impossible de joindre le serveur. Vérifie ta connexion internet puis recharge la page.');
+}
 })();
 </script>
 
