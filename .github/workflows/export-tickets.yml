@@ -28,6 +28,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, os, re, urllib.request, datetime
+          HDR = {"Referer": "https://rottweilert.github.io/Apnee/"}
           # Même clé web publique que l'appli : relue dans index.html.
           KEY = re.search(r'apiKey:\s*"([^"]+)"', open("index.html", encoding="utf-8").read()).group(1)
           base = "https://firestore.googleapis.com/v1/projects/apnee-rottweilert/databases/(default)/documents/tickets"
@@ -37,7 +38,7 @@ jobs:
               if not re.fullmatch(r"n-[a-z0-9]{4,40}", i):
                   print("Ignoré (identifiant invalide) :", i); continue
               try:
-                  doc = json.load(urllib.request.urlopen(f"{base}/{i}?key={KEY}"))
+                  doc = json.load(urllib.request.urlopen(urllib.request.Request(f"{base}/{i}?key={KEY}", headers=HDR)))
               except Exception as e:
                   print("Introuvable :", i, e); continue
               if doc.get("fields", {}).get("kind", {}).get("stringValue") != "note":
@@ -45,14 +46,16 @@ jobs:
               body = json.dumps({"fields": {"status": {"stringValue": "done"}, "updated": {"stringValue": now}}}).encode()
               url = (f"{base}/{i}?key={KEY}&updateMask.fieldPaths=status&updateMask.fieldPaths=updated"
                      "&currentDocument.exists=true")
-              req = urllib.request.Request(url, data=body, method="PATCH", headers={"Content-Type": "application/json"})
+              req = urllib.request.Request(url, data=body, method="PATCH", headers={**HDR, "Content-Type": "application/json"})
               urllib.request.urlopen(req).read()
               print("Résolu :", i)
           PY
       - name: Lire les tickets dans Firebase
         run: |
           python3 - <<'PY'
-          import json, re, urllib.request
+          import json, os, re, urllib.request, urllib.error
+          # La clé web peut être limitée au site : on se présente comme l'appli.
+          HDR = {"Referer": "https://rottweilert.github.io/Apnee/"}
           KEY = re.search(r'apiKey:\s*"([^"]+)"', open("index.html", encoding="utf-8").read()).group(1)
           base = "https://firestore.googleapis.com/v1/projects/apnee-rottweilert/databases/(default)/documents/tickets"
           def val(v):
@@ -67,7 +70,13 @@ jobs:
           docs, token = [], ""
           while True:
               url = f"{base}?pageSize=300&key={KEY}" + (f"&pageToken={token}" if token else "")
-              data = json.load(urllib.request.urlopen(url))
+              try:
+                  data = json.load(urllib.request.urlopen(urllib.request.Request(url, headers=HDR)))
+              except urllib.error.HTTPError as e:
+                  msg = e.read().decode("utf-8", "replace")
+                  print("Erreur Firebase", e.code, msg)
+                  open(os.environ["GITHUB_STEP_SUMMARY"], "a").write(f"Erreur Firebase {e.code} : {msg}\n")
+                  raise SystemExit(1)
               docs += data.get("documents", [])
               token = data.get("nextPageToken")
               if not token: break
