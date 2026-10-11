@@ -74,7 +74,7 @@ jobs:
                   data = json.load(urllib.request.urlopen(urllib.request.Request(url, headers=HDR)))
               except urllib.error.HTTPError as e:
                   msg = e.read().decode("utf-8", "replace")
-                  print("Erreur Firebase", e.code, msg)
+                  print("::error::Erreur Firebase", e.code, " ".join(msg.split())[:600])
                   open(os.environ["GITHUB_STEP_SUMMARY"], "a").write(f"Erreur Firebase {e.code} : {msg}\n")
                   raise SystemExit(1)
               docs += data.get("documents", [])
