@@ -90,7 +90,7 @@ jobs:
           notes.sort(key=lambda n: (n["statut"] == "done", -(n["priorite"] or 0), n["cree_le"]))
           with open("tickets/tickets.json", "w", encoding="utf-8") as fh:
               json.dump(notes, fh, ensure_ascii=False, indent=2)
-          print(len(notes), "tickets exportés")
+          print(f"::notice::{len(notes)} tickets exportés ({len(docs)} documents lus dans Firebase)")
           PY
       - name: Enregistrer dans le dépôt
         run: |
