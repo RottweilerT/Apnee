@@ -319,11 +319,13 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
     <div class="panel stack">
       <div class="row" style="justify-content:space-between"><span class="label">Signaux sonores</span><button class="btn-ghost" id="testSnd" style="padding:6px 14px;font-size:.85rem">Écouter les bips</button></div>
       <ul class="sounds">
-        <li><b>Début d'apnée</b><span>mélodie montante, bien distincte</span></li>
-        <li><b>10 s avant une apnée</b><span>deux bips d'alerte, puis 3, 2, 1</span></li>
-        <li><b>Chaque minute d'apnée</b><span>deux bips aigus</span></li>
-        <li><b>Chaque minute de respiration</b><span>un bip grave</span></li>
+        <li><b>15 s avant une apnée</b><span>deux bips d'alerte</span></li>
+        <li><b>3, 2, 1</b><span>un bip court par seconde</span></li>
+        <li><b>Début d'apnée</b><span>un long bip aigu, très clair</span></li>
+        <li><b>3, 2, 1 min avant la fin</b><span>autant de bips que de minutes restantes</span></li>
+        <li><b>10 s avant la fin</b><span>trois bips rapides</span></li>
         <li><b>Fin d'apnée</b><span>deux notes descendantes</span></li>
+        <li><b>Chaque minute de respiration</b><span>un bip grave</span></li>
       </ul>
     </div>
     <button class="btn btn-wide" id="start">Démarrer la séance</button>
@@ -746,15 +748,18 @@ let audio=null, wake=null, run=null, raf=0;
 function beep(f=880,d=.15,v=.25){ try{ if(!audio) return; const o=audio.createOscillator(), g=audio.createGain(); o.frequency.value=f; o.connect(g); g.connect(audio.destination); const t=audio.currentTime; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.001,t+d); o.start(t); o.stop(t+d); }catch{} }
 function seq(notes,v=.3){ let t=0; notes.forEach(([f,d,gap])=>{ setTimeout(()=>beep(f,d,v),t*1000); t+=d+(gap??.05); }); }
 const snd = {
-  apneaStart(){ seq([[523,.12],[659,.12],[784,.12],[1046,.55]],.35); vib([200,80,200,80,400]); },
+  apneaStart(){ beep(1046,1.1,.5); setTimeout(()=>beep(523,1.1,.25),0); vib(900); },
   apneaEnd(){ seq([[784,.2,.06],[523,.35]]); vib([120,80,120]); },
-  warn10(){ seq([[740,.12,.12],[740,.12]]); vib([80,80,80]); },
-  count(){ beep(990,.08,.2); },
+  warn15(){ seq([[740,.15,.15],[740,.15]]); vib([100,100,100]); },
+  end10(){ seq([[1319,.08,.06],[1319,.08,.06],[1319,.08]],.32); vib([60,50,60,50,60]); },
+  minLeft(n){ n=Math.max(1,Math.min(5,n)); seq(Array.from({length:n},()=>[880,.14,.18]),.3); vib(Array.from({length:n*2-1},(_,i)=>i%2?100:120)); },
+  count(){ beep(990,.1,.3); vib(60); },
   minApnea(){ seq([[1175,.09,.08],[1175,.09]],.28); vib([60,60,60]); },
   minBreath(){ beep(392,.25,.28); vib(80); }
 };
 function ensureAudio(){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume?.(); }catch{} }
-$('testSnd').addEventListener('click',()=>{ ensureAudio(); const order=['apneaStart','warn10','minApnea','minBreath','apneaEnd']; order.forEach((k,i)=>setTimeout(()=>snd[k](),i*1400)); });
+$('testSnd').addEventListener('click',()=>{ ensureAudio(); const order=[()=>snd.warn15(),()=>snd.count(),()=>snd.count(),()=>snd.count(),()=>snd.apneaStart(),()=>snd.minLeft(2),()=>snd.minLeft(1),()=>snd.end10(),()=>snd.apneaEnd(),()=>snd.minBreath()];
+  const gaps=[0,1500,2500,3500,4500,6500,8300,9800,11300,12800]; order.forEach((f,i)=>setTimeout(f,gaps[i])); });
 function vib(p){ try{ navigator.vibrate?.(p); }catch{} }
 $('start').addEventListener('click', async ()=>{
   if(!plan) return;
@@ -800,18 +805,20 @@ function tick(){
   const p=curPhase(); if(!p) return;
   const e=elapsed(); const C=339.3;
   const el=Math.floor(e);
-  if(el!==run.lastEl){ run.lastEl=el; if(el>0 && el%60===0 && (p.max || el<p.dur)) (p.k==='apnea'?snd.minApnea:snd.minBreath)(); }
+  if(el!==run.lastEl){ run.lastEl=el; if(el>0 && el%60===0){ if(p.k==='apnea'){ if(p.max) snd.minApnea(); } else if(el<p.dur) snd.minBreath(); } }
   if(p.k==='apnea' && p.max){
     $('rClock').textContent=fmt(e); const ref=Math.max(profile?.record||0,bestEver());
     $('rSub').textContent = ref ? (e>ref?'Nouveau record !':'Record : '+fmt(ref)) : 'chrono libre';
     $('rArc').setAttribute('stroke-dashoffset', ref ? C*(1-Math.min(1,e/ref)) : C*(1-(e%60)/60));
   } else {
     const left=p.dur-e; $('rClock').textContent=fmt(Math.ceil(left));
-    $('rSub').textContent = p.k==='apnea' ? 'sur '+fmt(p.dur) : 'restant';
+    const nxA=run.phases[run.pi+1]; const sL=Math.ceil(left);
+    $('rSub').textContent = p.k==='apnea' ? 'sur '+fmt(p.dur) : (nxA&&nxA.k==='apnea'&&sL<=15 ? (sL<=3?'Prépare-toi…':'Apnée dans '+sL+' s') : 'restant');
     $('rArc').setAttribute('stroke-dashoffset', C*(1-Math.min(1,e/p.dur)));
     const sec=Math.ceil(left);
     if(sec!==run.lastSec){ const first=run.lastSec===-1; run.lastSec=sec; const nx=run.phases[run.pi+1];
-      if(p.k!=='apnea' && nx && nx.k==='apnea'){ if(sec===10 || (first && sec<10)) snd.warn10(); else if(!first && sec<=3 && sec>0) snd.count(); } }
+      if(p.k!=='apnea' && nx && nx.k==='apnea'){ if(sec===15 || (first && sec<15 && sec>3)) snd.warn15(); else if(!first && sec<=3 && sec>0) snd.count(); }
+      if(p.k==='apnea' && !first){ if(sec===10) snd.end10(); else if(sec>10 && sec%60===0 && sec<p.dur) snd.minLeft(sec/60); } }
     if(left<=0){ if(p.k==='apnea') endApnea(false); else nextPhase(); }
   }
   raf=requestAnimationFrame(tick);
