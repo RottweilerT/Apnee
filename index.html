@@ -92,11 +92,11 @@ nav.tabs button:disabled{opacity:.4;cursor:not-allowed}
 .empty{text-align:center;padding:28px 16px;color:var(--muted)}
 .empty svg{width:64px;height:64px;color:var(--deep);opacity:.7}
 /* Runner */
-#runner{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));transition:background .6s}
+#runner{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));transition:background .6s}
 #runner.ph-apnea{background:var(--deep-soft)} #runner.ph-rest,#runner.ph-prep{background:var(--breath-soft)}
 @media (prefers-reduced-motion:reduce){#runner{transition:none}}
 .rtop{display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:520px;width:100%;margin:0 auto}
-.rmain{flex:1;display:grid;place-items:center;align-content:center;gap:10px;text-align:center}
+.rmain{flex:1 0 auto;padding-block:12px;display:grid;place-items:center;align-content:center;gap:10px;text-align:center}
 .phase{font-family:var(--f-display);font-weight:800;font-size:1.9rem;letter-spacing:-.01em}
 .ring{width:min(78vw,320px);aspect-ratio:1;max-width:100%;position:relative}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
@@ -104,7 +104,10 @@ nav.tabs button:disabled{opacity:.4;cursor:not-allowed}
 .ring .clock strong{font-family:var(--f-num);font-size:clamp(3rem,16vw,4.6rem);font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
 .ring .clock span{font-size:.9rem;color:var(--muted)}
 .next{color:var(--muted);font-size:.95rem}
-.ractions{display:grid;gap:10px;max-width:520px;width:100%;margin:0 auto}
+.ractions{display:grid;gap:10px;max-width:520px;width:100%;margin:0 auto;position:sticky;bottom:0;padding-top:10px;background:inherit;flex-shrink:0}
+#runner .ractions{background:linear-gradient(to bottom,transparent,var(--bg) 14px)}
+#runner.ph-apnea .ractions{background:linear-gradient(to bottom,transparent,var(--deep-soft) 14px)}
+#runner.ph-rest .ractions,#runner.ph-prep .ractions{background:linear-gradient(to bottom,transparent,var(--breath-soft) 14px)}
 .btn-breathe{background:var(--ink);color:var(--bg);padding:20px;font-size:1.2rem}
 .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
@@ -840,6 +843,7 @@ function finish(completed){
     <div class="field" style="width:100%;max-width:420px;text-align:left"><label for="rNote">Note</label><textarea id="rNote" rows="2" maxlength="300" placeholder="Contractions à 2:10, bonne détente…"></textarea></div>`;
   $('feel').querySelectorAll('button').forEach(b=>b.onclick=()=>{ run.feel=+b.dataset.v; $('feel').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
   $('rActions').innerHTML = done.length ? `<button class="btn btn-wide" id="rSave">Enregistrer dans l'historique</button><button class="btn-ghost btn-wide" id="rDiscard">Ne pas enregistrer</button>` : `<button class="btn-ghost btn-wide" id="rDiscard">Fermer</button>`;
+  $('runner').scrollTop=0;
   $('rDiscard').onclick=closeRunner;
   if($('rSave')) $('rSave').onclick=async ()=>{
     $('rSave').disabled=true; $('rSave').textContent='Enregistrement…';
