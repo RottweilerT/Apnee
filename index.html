@@ -227,6 +227,59 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
 @media (max-width:480px){.reg-grid3{grid-template-columns:1fr}}
 @media (max-width:360px){.reg-grid{grid-template-columns:1fr}}
 .reg{--reg-accent:var(--deep);--reg-on-accent:var(--surface);--reg-soft:var(--deep-soft);--reg-surface:var(--surface);--reg-field:var(--bg);--reg-line:var(--line);--reg-ink:var(--ink);--reg-muted:var(--muted);--reg-kicker:var(--deep);--reg-danger:var(--danger);--reg-danger-soft:color-mix(in srgb,var(--danger) 14%,var(--surface));--reg-display:var(--f-display);--reg-body:var(--f-body);--reg-r:var(--r)}
+
+/* ===== Ergonomie : menus d'actions, dialogues, Mes séances, réglages ===== */
+.am{z-index:70}
+.am button.danger{color:var(--danger)}
+.am hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+.more{flex:none;background:transparent;border:1px solid transparent;color:var(--muted);padding:0;width:40px;height:40px;border-radius:10px;display:inline-grid;place-items:center}
+.more:hover,.more[aria-expanded="true"]{background:var(--deep-soft);color:var(--ink)}
+.more svg{width:20px;height:20px}
+.lp{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.sm{padding:7px 14px;font-size:.88rem}
+.progs{display:grid;gap:8px}
+.prog{display:flex;align-items:center;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px 3px 3px 0;min-width:0}
+.prog[aria-current="true"]{border-color:var(--deep);background:var(--deep-soft)}
+.prog-main{flex:1;min-width:0;background:transparent;border:0;border-radius:10px;padding:8px 12px;text-align:left;color:var(--ink);font-weight:400;display:grid;gap:1px}
+.prog-main .pn{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prog-main .pm{font-size:.8rem;color:var(--muted);font-family:var(--f-num);overflow-wrap:anywhere}
+.prog-main .fav{color:var(--breath);margin-right:5px}
+.dirty{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.88rem;color:var(--muted);background:var(--breath-soft);border-radius:12px;padding:10px 12px}
+.dirty span{flex:1 1 100%;color:var(--ink)}
+.hfilters{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hmonth{display:flex;justify-content:space-between;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-top:6px}
+.hist .hrow{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;padding:3px 3px 3px 0;gap:4px}
+.hmain{background:transparent;border:0;border-radius:10px;text-align:left;padding:8px 12px;color:var(--ink);font-weight:400;display:grid;gap:2px;min-width:0}
+.hmain .d{font-weight:700}
+.hmain .m{color:var(--muted);font-size:.85rem;overflow-wrap:anywhere}
+.hist .hrow .b{padding-right:4px}
+#chart circle[data-id]{cursor:pointer}
+#chart circle[data-id]:focus{outline:none;stroke:var(--ink);stroke-width:3}
+dialog.dlg{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:0;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+dialog.dlg::backdrop{background:rgba(4,18,22,.5)}
+.dlg-in{display:grid;gap:12px;padding:18px;margin:0}
+.dlg h3{margin:0;font-family:var(--f-display);font-size:1.2rem;text-wrap:balance}
+.dlg p{margin:0;color:var(--muted)}
+.dlg-acts{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:8px;flex-wrap:wrap}
+.btn-danger-full{background:var(--danger);color:var(--surface)}
+.dlg .tbl{max-height:40vh;overflow:auto}
+.dlg table{width:100%;border-collapse:collapse;font-family:var(--f-num);font-size:.9rem}
+.dlg th,.dlg td{padding:5px 4px;border-bottom:1px dashed var(--line);text-align:right}
+.dlg th{font-family:var(--f-body);font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.dlg th:first-child,.dlg td:first-child{text-align:left}
+.toast{display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px)}
+.toast button{background:transparent;border:0;color:inherit;font-weight:700;padding:2px 4px;text-decoration:underline}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#runner:focus{outline:none}
+.kbd-hint{display:none;text-align:center;font-size:.8rem;color:var(--muted);margin-top:8px}
+@media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
+.kbd-hint kbd{font-family:var(--f-num);border:1px solid var(--line);border-radius:5px;padding:0 5px;background:var(--surface)}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:.92rem}
+.switch input{width:22px;height:22px;accent-color:var(--deep)}
+input[type=range]{padding:0;border:0;background:transparent;accent-color:var(--deep);flex:1}
+.field .lbl{font-size:.85rem;font-weight:700}
+.seg button[aria-checked="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+body.busy{cursor:progress}
 </style>
 
 <div class="wrap">
@@ -295,6 +348,20 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
         <div class="reg-actions"><button class="reg-btn" type="submit" id="pSubmit">Je m'inscris</button><button class="reg-btn ghost" type="button" id="pCancel" hidden>Annuler</button></div>
       </form>
     </section>
+    <div class="panel stack" id="setBox" hidden>
+      <span class="label">Réglages</span>
+      <label class="switch" for="stSound"><span>Bips</span><input type="checkbox" id="stSound"></label>
+      <div class="field"><label for="stVol">Volume des bips</label><div class="row" style="flex-wrap:nowrap"><input type="range" id="stVol" min="0.1" max="1" step="0.1"><button type="button" class="btn-ghost sm" id="stTest">Tester</button></div></div>
+      <label class="switch" for="stVib"><span>Vibrations</span><input type="checkbox" id="stVib"></label>
+      <div class="field"><span class="lbl" id="stThemeL">Thème</span><div class="seg" id="stTheme" role="radiogroup" aria-labelledby="stThemeL"><button type="button" role="radio" data-v="auto">Automatique</button><button type="button" role="radio" data-v="light">Clair</button><button type="button" role="radio" data-v="dark">Sombre</button></div></div>
+      <div class="field"><label for="stPrep">Respiration libre par défaut</label><input id="stPrep" class="num" inputmode="numeric" placeholder="1:00"><small>Utilisée au début de chaque séance.</small></div>
+      <p class="status" id="stSaved" aria-live="polite" style="margin:0"></p>
+    </div>
+    <div class="panel stack" id="dataBox" hidden>
+      <span class="label">Mes données</span>
+      <p class="status" style="margin:0">Télécharge une copie de tes séances, à garder ou à ouvrir dans un tableur.</p>
+      <div class="row"><button class="btn-ghost sm" type="button" id="exCsv">Exporter en CSV (tableur)</button><button class="btn-ghost sm" type="button" id="exJson">Exporter tout en JSON</button></div>
+    </div>
     <div class="panel stack" id="importZone" hidden>
       <span class="label">Séances gardées sur cet appareil</span>
       <p class="status" style="margin:0">Ces séances ont été faites avant le passage en ligne. Importe celles qui sont à toi pour les retrouver partout.</p>
@@ -309,8 +376,13 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
   <section id="tab-seance" class="stack" hidden>
     <div>
       <h2>Organiser une séance</h2>
-      <p class="lead">Choisis un modèle ou règle chaque paramètre. Les apnées et les repos peuvent augmenter ou diminuer à chaque tour.</p>
+      <p class="lead">Lance une de tes séances, ou pars d'un modèle et règle chaque paramètre. Les apnées et les repos peuvent augmenter ou diminuer à chaque tour.</p>
     </div>
+    <div class="panel stack" id="progBox">
+      <div class="row" style="justify-content:space-between"><span class="label">Mes séances</span><button class="btn sm" id="progNew" type="button">+ Nouvelle séance</button></div>
+      <div class="progs" id="progList"></div>
+    </div>
+    <span class="label">Modèles</span>
     <div class="chips" role="group" aria-label="Modèles de séance" id="presets">
       <button class="chip" data-p="prog" aria-pressed="true">Progressive</button>
       <button class="chip" data-p="co2" aria-pressed="false">Table CO₂</button>
@@ -325,10 +397,11 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
         <div class="field"><label for="sR0">1ᵉʳ repos</label><input id="sR0" class="num" inputmode="numeric" value="0:30"></div>
         <div class="field"><label for="sRd">Variation du repos</label><input id="sRd" class="num" inputmode="text" value="0:30"><small>« -0:15 » pour réduire</small></div>
         <div class="field"><label for="sN">Nombre d'apnées</label><input id="sN" class="num" type="number" min="1" max="12" value="3"></div>
-        <div class="field"><label for="sPrep">Respiration libre au départ</label><input id="sPrep" class="num" inputmode="numeric" value="1:00"><small>1:00 par défaut</small></div>
+        <div class="field"><label for="sPrep">Respiration libre au départ</label><input id="sPrep" class="num" inputmode="numeric" value="1:00"><small>Valeur par défaut réglable dans Compte</small></div>
       </div>
       <div class="field"><label class="row" style="gap:8px;font-weight:400"><input type="checkbox" id="sMax" style="width:auto"> Dernière apnée en maximale (chrono libre)</label></div>
     </div>
+    <div class="dirty" id="progDirty" hidden></div>
     <div class="panel stack">
       <div class="row" style="justify-content:space-between"><span class="label">Aperçu</span>
         <div class="legend"><span><b style="background:var(--deep)"></b>Apnée</span><span><b style="background:var(--breath)"></b>Repos</span></div></div>
@@ -353,7 +426,7 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
 
   <!-- HISTORIQUE -->
   <section id="tab-hist" class="stack" hidden>
-    <div><h2>Historique et progression</h2><p class="lead">Ton meilleur temps de chaque séance, et l'évolution de ton record personnel.</p></div>
+    <div><h2>Historique et progression</h2><p class="lead">Ton meilleur temps de chaque séance, et l'évolution de ton record personnel. Touche une séance pour voir le détail, ou ⋯ pour ses actions.</p></div>
     <div class="stats" id="stats"></div>
     <div class="panel stack">
       <div class="row" style="justify-content:space-between"><span class="label">Évolution du record</span>
@@ -369,13 +442,14 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
         <button class="btn" type="submit">Ajouter</button>
       </form>
     </details>
-    <div><span class="label">Séances</span></div>
+    <div class="row" style="justify-content:space-between"><span class="label">Séances</span><span class="status" id="hCount"></span></div>
+    <div class="hfilters"><select id="hType" aria-label="Type de séance"><option value="all">Tous les types</option></select><select id="hPeriod" aria-label="Période"><option value="all">Toute la période</option><option value="30">30 derniers jours</option><option value="90">3 derniers mois</option><option value="365">12 derniers mois</option></select></div>
     <div class="hist" id="hist"></div>
   </section>
 
   <!-- NOTES (tickets) -->
   <section id="tab-notes" class="stack" hidden>
-    <div><h2>Notes</h2><p class="lead">Une idée, une chose à corriger, un problème dans l'appli ? Écris un ticket. Tous les inscrits voient les tickets.</p></div>
+    <div><h2>Notes</h2><p class="lead">Une idée, une chose à corriger, un problème dans l'appli ? Écris un ticket. Tous les inscrits voient les tickets ; seul l'auteur peut modifier ou supprimer le sien.</p></div>
     <form id="ntForm" class="panel stack" autocomplete="off" novalidate>
       <span class="label" id="ntTitle">Nouveau ticket</span>
       <div class="field"><label for="ntSubject">Titre (onglet concerné)</label><select id="ntSubject"><option value="" disabled selected>Choisis un onglet…</option><option>Compte</option><option>Séance</option><option>Chrono et bips</option><option>Historique</option><option>Notes</option><option value="Tous">Tous (toute l'appli)</option></select></div>
@@ -403,7 +477,7 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
   <button role="tab" id="t-notes" data-tab="notes" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 11h6M9 15h6M9 7h3"/></svg>Notes</button>
 </div></nav>
 
-<div id="runner" hidden>
+<div id="runner" hidden tabindex="-1" role="region" aria-label="Séance en cours">
   <div class="rtop"><span class="label" id="rStep"></span><button class="btn-ghost" id="rStop" style="padding:8px 14px;font-size:.9rem">Arrêter</button></div>
   <div class="rmain" id="rMain">
     <div class="phase" id="rPhase"></div>
@@ -413,8 +487,10 @@ button.who{background:var(--surface);border:1px solid var(--line);color:var(--in
     <div class="dots" id="rDots"></div>
   </div>
   <div class="ractions" id="rActions"></div>
+  <div class="kbd-hint" id="rKbd"><kbd>Espace</kbd> je respire / passer · <kbd>Échap</kbd> arrêter</div>
+  <div class="sr" id="rLive" aria-live="assertive"></div>
 </div>
-<div class="toast" id="toast" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -427,7 +503,111 @@ const parseT = v => { v = String(v||'').trim(); if(!v) return null; let neg = fa
   let s; if (/^\d+$/.test(v)) s = +v * (+v <= 15 ? 60 : 1); else { const m = v.match(/^(\d+)\s*[:'m.h]\s*(\d{1,2})\s*(s|")?$/); if(!m) return null; s = +m[1]*60 + +m[2]; }
   return neg ? -s : s; };
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const toast = msg => { const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2600); };
+/* Message éphémère ; avec act {label, run} : bouton d'action (ex. « Annuler ») pendant 6,5 s. */
+const toast = (msg, act) => { const t=$('toast'); t.textContent=msg;
+  if(act){ const b=document.createElement('button'); b.type='button'; b.textContent=act.label||'Annuler'; b.onclick=()=>{ t.hidden=true; clearTimeout(toast._t); act.run(); }; t.appendChild(b); }
+  t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true, act?6500:2600); };
+
+/* =====================================================================
+   COMPOSANTS RÉUTILISABLES (copiables tels quels dans les autres applis)
+   - svgI(nom)            : icônes des menus
+   - AM.open(items, ancre) : menu d'actions (souris, tactile, clavier)
+   - actionsOn(liste, sélecteur, items) : clic droit, appui long et bouton ⋯ sur les éléments d'une liste
+   - dlg / confirmDlg / promptDlg : dialogues (confirmation, renommage…)
+   - guarded(clé, fn)     : empêche de lancer deux fois la même opération
+   Les actions elles-mêmes (quoi afficher, qui a le droit) sont définies plus bas, par module.
+   ===================================================================== */
+const ICONS={
+  play:'<path d="M7 5l12 7-12 7z"/>', edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>',
+  rename:'<path d="M4 7V5h16v2M12 5v14M9 19h6"/>', copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', up:'<path d="M12 19V5M6 11l6-6 6 6"/>', down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  check:'<path d="M5 12l5 5L20 7"/>', redo:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>', clip:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9z"/>',
+  doing:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'
+};
+const svgI=n=>n==='dots'?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'
+  :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'')+'</svg>';
+
+const AM=(()=>{
+  const el=document.createElement('div'); el.className='tp-menu am'; el.setAttribute('role','menu'); el.hidden=true; document.body.appendChild(el);
+  let opener=null, closedBy=null, closedAt=0, openedAt=0;
+  function close(restore=true){ if(el.hidden) return; el.hidden=true; el.innerHTML='';
+    if(opener){ opener.setAttribute('aria-expanded','false'); if(restore&&opener.isConnected) opener.focus({preventScroll:true}); } opener=null; }
+  function open(items, at, from){
+    items=(items||[]).filter(i=>i&&!i.hidden);
+    while(items.length&&items[0].sep) items.shift(); while(items.length&&items[items.length-1].sep) items.pop();
+    if(!items.length) return;
+    close(false); opener=from||null; if(opener&&opener.classList.contains('more')) opener.setAttribute('aria-expanded','true');
+    items.forEach(it=>{ if(it.sep){ el.appendChild(document.createElement('hr')); return; }
+      const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); if(it.danger) b.className='danger'; if(it.disabled) b.disabled=true;
+      b.innerHTML=(it.icon?svgI(it.icon):'')+'<span></span>'; b.lastChild.textContent=it.label;
+      b.onclick=e=>{ e.stopPropagation(); close(); it.run(); };
+      el.appendChild(b); });
+    el.hidden=false; openedAt=Date.now(); const w=el.offsetWidth, h=el.offsetHeight; let x, y;
+    if(at instanceof Element){ const r=at.getBoundingClientRect(); x=r.right-w; y=r.bottom+6; if(y+h>innerHeight-8) y=r.top-h-6; }
+    else { x=at.x; y=at.y+8; if(y+h>innerHeight-8) y=at.y-h-8; }
+    x=Math.max(8,Math.min(x,innerWidth-w-8)); y=Math.max(8,Math.min(y,innerHeight-h-8));
+    el.style.left=x+'px'; el.style.top=y+'px';
+    const f=el.querySelector('button:not(:disabled)'); if(f) f.focus({preventScroll:true});
+  }
+  el.addEventListener('keydown',e=>{ const bs=[...el.querySelectorAll('button:not(:disabled)')], i=bs.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'){ e.preventDefault(); bs[(i+1)%bs.length].focus(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); bs[(i-1+bs.length)%bs.length].focus(); }
+    else if(e.key==='Home'){ e.preventDefault(); bs[0].focus(); } else if(e.key==='End'){ e.preventDefault(); bs[bs.length-1].focus(); }
+    else if(e.key==='Escape'){ e.preventDefault(); close(); } else if(e.key==='Tab'){ e.preventDefault(); close(); } });
+  document.addEventListener('pointerdown',e=>{ if(!el.hidden&&!el.contains(e.target)){ closedBy=e.target.closest&&e.target.closest('.more'); closedAt=Date.now(); close(false); } },true);
+  addEventListener('scroll',e=>{ if(!el.hidden&&!el.contains(e.target)&&Date.now()-openedAt>300) close(false); },{passive:true,capture:true});
+  addEventListener('resize',()=>close(false));
+  return { open, close, get isOpen(){ return !el.hidden; }, justClosedBy:b=>{ const r=!!b&&b===closedBy&&Date.now()-closedAt<500; closedBy=null; return r; }, el };
+})();
+
+/* Clic droit, appui long (tactile) et bouton « ⋯ » sur les éléments `sel` d'un conteneur dont le contenu est redessiné. */
+function actionsOn(box, sel, itemsFor){
+  let tm=null, sx=0, sy=0, lp=false;
+  const anchorOf=it=>it.querySelector('.more')||it;
+  box.addEventListener('contextmenu',e=>{ const it=e.target.closest(sel); if(!it||!box.contains(it)||e.target.closest('input,textarea,select')) return;
+    e.preventDefault(); clearTimeout(tm); tm=null; if(lp&&AM.isOpen) return; lp=e.pointerType==='touch'||lp;
+    const kb=!e.clientX&&!e.clientY; AM.open(itemsFor(it), kb?anchorOf(it):{x:e.clientX,y:e.clientY}, anchorOf(it)); });
+  box.addEventListener('pointerdown',e=>{ lp=false; if(e.pointerType==='mouse') return; const it=e.target.closest(sel);
+    if(!it||e.target.closest('.more,[data-st],input,textarea,select')) return;
+    sx=e.clientX; sy=e.clientY; clearTimeout(tm);
+    tm=setTimeout(()=>{ tm=null; lp=true; vib(15); AM.open(itemsFor(it),{x:sx,y:sy},anchorOf(it)); },520); });
+  box.addEventListener('pointermove',e=>{ if(tm&&Math.hypot(e.clientX-sx,e.clientY-sy)>10){ clearTimeout(tm); tm=null; } });
+  ['pointerup','pointercancel'].forEach(k=>box.addEventListener(k,()=>{ clearTimeout(tm); tm=null; }));
+  box.addEventListener('click',e=>{
+    if(lp){ lp=false; e.preventDefault(); e.stopPropagation(); return; }
+    const m=e.target.closest('.more'); if(!m||!box.contains(m)) return; const it=m.closest(sel); if(!it) return;
+    e.preventDefault(); e.stopPropagation(); if(AM.justClosedBy(m)) return; AM.open(itemsFor(it), m, m);
+  },true);
+}
+
+/* Dialogues : la fenêtre se ferme avec Échap, « Annuler » ou un appui à côté. */
+function dlg(html){ const d=document.createElement('dialog'); d.className='dlg'; d.innerHTML=html; document.body.appendChild(d);
+  d.addEventListener('close',()=>setTimeout(()=>d.remove(),0)); d.addEventListener('click',e=>{ if(e.target===d) d.close(); });
+  if(d.showModal) d.showModal(); else d.setAttribute('open',''); return d; }
+function confirmDlg({title,text,ok='Supprimer',danger=true}){ return new Promise(res=>{
+  const d=dlg(`<div class="dlg-in" role="alertdialog" aria-modal="true"><h3></h3><p></p><div class="dlg-acts"><button type="button" class="${danger?'btn-danger-full':'btn'}" data-ok></button><button type="button" class="btn-ghost" data-x>Annuler</button></div></div>`);
+  d.querySelector('h3').textContent=title; d.querySelector('p').textContent=text||''; d.querySelector('[data-ok]').textContent=ok;
+  let yes=false; d.querySelector('[data-ok]').onclick=()=>{ yes=true; d.close(); }; d.querySelector('[data-x]').onclick=()=>d.close();
+  d.addEventListener('close',()=>res(yes)); setTimeout(()=>d.querySelector('[data-x]').focus(),0); }); }
+function promptDlg({title,label,value='',ok='Enregistrer',hint='',max=40,validate}){ return new Promise(res=>{
+  const d=dlg(`<form class="dlg-in" novalidate><h3></h3>${hint?'<p class="hint"></p>':''}<div class="field"><label for="dlgIn"></label><input id="dlgIn" maxlength="${max}" autocomplete="off"></div><p class="warn" role="alert" hidden></p><div class="dlg-acts"><button class="btn" type="submit"></button><button class="btn-ghost" type="button" data-x>Annuler</button></div></form>`);
+  const f=d.querySelector('form'), inp=d.querySelector('input'), er=d.querySelector('.warn');
+  d.querySelector('h3').textContent=title; if(hint) d.querySelector('.hint').textContent=hint; d.querySelector('label').textContent=label; d.querySelector('[type=submit]').textContent=ok; inp.value=value;
+  let out=null;
+  f.onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim().replace(/\s+/g,' '); const m=validate&&validate(v); if(m){ er.textContent=m; er.hidden=false; inp.focus(); return; } out=v; d.close(); };
+  d.querySelector('[data-x]').onclick=()=>d.close(); d.addEventListener('close',()=>res(out));
+  setTimeout(()=>{ inp.focus(); inp.select(); },0); }); }
+
+/* Une même opération ne peut pas tourner deux fois en même temps (double appui, connexion lente). */
+const running=new Set();
+async function guarded(key, fn){ if(running.has(key)) return; running.add(key); document.body.classList.add('busy');
+  try{ return await fn(); } finally{ running.delete(key); if(!running.size) document.body.classList.remove('busy'); } }
+async function copyText(txt){ try{ await navigator.clipboard.writeText(txt); return true; }
+  catch(_){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(__){} ta.remove(); return ok; } }
+function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1500); }
+const pad2=n=>String(n).padStart(2,'0');
+const localDay=d=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
 
 /* ---------- Comptes en ligne (Firebase) ---------- */
 const FB_CONFIG={apiKey:"AIzaSyC7DGE-qYz-wivF48odsHDy84JyJPkztCE",authDomain:"apnee-rottweilert.firebaseapp.com",projectId:"apnee-rottweilert",storageBucket:"apnee-rottweilert.firebasestorage.app",messagingSenderId:"699675461726",appId:"1:699675461726:web:01af8734518f0b99a04ccf"};
@@ -468,7 +648,14 @@ const store={
   async addSession(_a,s){ const ref=this.ses().doc(); queued(ref.set(s)).catch(fbWarn); return {id:ref.id,...s}; },
   async delSession(_a,id){ return queued(this.ses().doc(id).delete()); },
   async importSessions(list){ const b=fdb.batch(); list.forEach(x=>{ const {id,...d}=x; b.set(this.ses().doc(id),d); }); return queued(b.commit(),4000); },
-  async deleteAll(){ const q=await this.ses().get(); for(let i=0;i<q.docs.length;i+=400){ const b=fdb.batch(); q.docs.slice(i,i+400).forEach(d=>b.delete(d.ref)); await b.commit(); } await this.uref().delete(); }
+  async updateSession(id,patch){ return queued(this.ses().doc(id).set(patch,{merge:true})); },
+  async restoreSession(id,data){ return queued(this.ses().doc(id).set(data)); },
+  progCol(){ return this.uref().collection('programmes'); },
+  async listProgs(){ const q=await this.progCol().get(); return q.docs.map(d=>({id:d.id,...d.data()})); },
+  async saveProg(id,data){ return queued(this.progCol().doc(id).set(data,{merge:true})); },
+  async restoreProg(id,data){ return queued(this.progCol().doc(id).set(data)); },
+  async delProg(id){ return queued(this.progCol().doc(id).delete()); },
+  async deleteAll(){ for(const col of [this.ses(), this.progCol()]){ const q=await col.get(); for(let i=0;i<q.docs.length;i+=400){ const b=fdb.batch(); q.docs.slice(i,i+400).forEach(d=>b.delete(d.ref)); await b.commit(); } } await this.uref().delete(); }
 };
 
 /* Séances gardées dans ce navigateur par l'ancienne version (avant le passage en ligne) */
@@ -481,6 +668,25 @@ function localAccounts(){
   return Object.entries(d.accounts||{}).map(([id,a])=>({id,...a,sessions:a.sessions||[]})).filter(a=>a.sessions.length);
 }
 const importedMap=()=>{ try{ return JSON.parse(lsGet(LS_IMP))||{}; }catch{ return {}; } };
+
+/* ---------- Réglages : gardés sur le compte (fiche users/{uid}.settings) et sur l'appareil ---------- */
+const SET_LS='apnee-reglages', S_DEF={sound:true,volume:.8,vibrate:true,theme:'auto',prep:60};
+let S={...S_DEF}; try{ S={...S_DEF,...(JSON.parse(lsGet(SET_LS))||{})}; }catch{}
+function applyTheme(){ const r=document.documentElement; if(S.theme==='light'||S.theme==='dark') r.dataset.theme=S.theme; else delete r.dataset.theme; }
+applyTheme();
+function renderSettings(){ $('stSound').checked=S.sound; $('stVol').value=S.volume; $('stVol').disabled=!S.sound; $('stTest').disabled=!S.sound; $('stVib').checked=S.vibrate;
+  [...$('stTheme').children].forEach(b=>b.setAttribute('aria-checked',String(b.dataset.v===S.theme))); $('stPrep').value=fmt(S.prep); }
+let stT=null;
+function setS(patch){ Object.assign(S,patch); lsSet(SET_LS,JSON.stringify(S)); applyTheme(); renderSettings(); $('stSaved').textContent='';
+  clearTimeout(stT); stT=setTimeout(async()=>{ if(!user||!profile) return; try{ await store.saveProfile({settings:{...S}}); profile.settings={...S}; $('stSaved').textContent='Réglages enregistrés sur ton compte.'; }catch(e){ fbWarn(e); } },600); }
+$('stSound').onchange=e=>setS({sound:e.target.checked});
+$('stVol').oninput=e=>setS({volume:+e.target.value});
+$('stTest').onclick=()=>{ ensureAudio(); snd.apneaStart(); };
+$('stVib').onchange=e=>{ setS({vibrate:e.target.checked}); if(e.target.checked) vib(80); };
+$('stTheme').onclick=e=>{ const b=e.target.closest('button[data-v]'); if(b) setS({theme:b.dataset.v}); };
+$('stTheme').onkeydown=e=>{ const bs=[...$('stTheme').children], i=bs.findIndex(b=>b.dataset.v===S.theme); const d=e.key==='ArrowRight'||e.key==='ArrowDown'?1:e.key==='ArrowLeft'||e.key==='ArrowUp'?-1:0; if(!d) return; e.preventDefault(); const n=bs[(i+d+bs.length)%bs.length]; setS({theme:n.dataset.v}); n.focus(); };
+$('stPrep').onchange=e=>{ const v=parseT(e.target.value); if(v==null||v<0||v>600){ toast('Écris une durée entre 0:00 et 10:00, par exemple 1:00.'); renderSettings(); return; }
+  setS({prep:v}); if(!loadedProg){ $('sPrep').value=fmt(v); buildPlan(); } };
 
 let accId=null, profile=null, sessions=[], currentTab='profil';
 const LEVELS={debutant:'débutant',intermediaire:'intermédiaire',confirme:'confirmé'};
@@ -507,6 +713,7 @@ function regView(){
   const showAcct=!!(user&&profile&&!editing);
   $('acctView').hidden=!showAcct; $('pForm').hidden=showAcct; $('authView').hidden=!!user;
   $('importZone').hidden = !showAcct || !localAccounts().length;
+  $('setBox').hidden=!showAcct; $('dataBox').hidden=!showAcct;
 }
 function renderAccounts(){
   $('who').textContent = profile ? profile.name : 'S\'inscrire';
@@ -665,22 +872,33 @@ $('ntForm').addEventListener('submit',async e=>{
     ntReset(); renderNotes();
   }catch(err){ $('ntErr').textContent=fbMsg(err); $('ntErr').hidden=false; }
 });
-$('ntList').addEventListener('click',async e=>{
-  const b=e.target.closest('button'); if(!b||b.disabled) return; const id=b.dataset.nid; const n=NOTES.get(id); if(!n) return;
-  try{
-    if(b.dataset.st){ await queued(ntCol().doc(id).set({...n,status:b.dataset.st,updated:new Date().toISOString()})); return; }
-    if(b.dataset.nact==='edit'){ ntEditing=id; ntSubjectSet(n.title||''); $('ntBody').value=n.body||''; $('ntCat').value=n.cat||'idee'; $('ntPrio').value=String(n.prio??1);
-      $('ntTitle').textContent='Modifier le ticket'; $('ntSubmit').textContent='Enregistrer'; $('ntCancel').hidden=false; window.scrollTo({top:0}); $('ntSubject').focus(); return; }
-    if(b.dataset.nact==='del'){ if(armedNt!==id){ armedNt=id; renderNotes(); setTimeout(()=>{ if(armedNt===id){ armedNt=null; renderNotes(); } },3000); return; }
-      armedNt=null; await queued(ntCol().doc(id).delete()); toast('Ticket supprimé'); }
-  }catch(err){ fbWarn(err); }
-});
+/* Droits : chacun change le statut de n'importe quel ticket ; seul l'auteur le modifie ou le supprime. */
+const can={ editTicket:n=>!!user&&!!n&&n.authorId===user.uid };
+const ntText=n=>`[${NCAT[n.cat]||'Note'}${n.prio===2?', priorité haute':''}] ${n.title}${n.body?'\n   '+n.body.replace(/\n/g,'\n   '):''}\n   (${n.author||'Anonyme'}, ${NSTAT[n.status]||'Ouvert'})`;
+async function ntSetStatus(id,st){ const n=NOTES.get(id); if(!n) return;
+  await guarded('nt-'+id, async()=>{ try{ await queued(ntCol().doc(id).set({...n,status:st,updated:new Date().toISOString()})); toast(st==='done'?'Ticket résolu':st==='doing'?'Ticket passé en cours':'Ticket rouvert'); }catch(err){ fbWarn(err); } }); }
+function ntEdit(id){ const n=NOTES.get(id); if(!n||!can.editTicket(n)) return;
+  ntEditing=id; ntSubjectSet(n.title||''); $('ntBody').value=n.body||''; $('ntCat').value=n.cat||'idee'; $('ntPrio').value=String(n.prio??1);
+  $('ntTitle').textContent='Modifier le ticket'; $('ntSubmit').textContent='Enregistrer'; $('ntCancel').hidden=false; window.scrollTo({top:0}); $('ntSubject').focus(); }
+async function ntDup(id){ const n=NOTES.get(id); if(!n) return;
+  await guarded('nt-dup', async()=>{ const now=new Date().toISOString();
+    try{ await queued(ntCol().doc('n-'+rid()).set({kind:'note',title:n.title,body:n.body||'',cat:n.cat||'idee',prio:n.prio??1,status:'open',at:now,updated:now,author:profile?.name||'',authorId:user.uid})); toast('Ticket dupliqué'); }catch(err){ fbWarn(err); } }); }
+async function ntDelete(id){ const n=NOTES.get(id); if(!n||!can.editTicket(n)) return;
+  if(!await confirmDlg({title:'Supprimer ce ticket ?',text:`« ${n.title} » disparaîtra pour tous les inscrits.`})) return;
+  await guarded('nt-'+id, async()=>{ try{ await queued(ntCol().doc(id).delete());
+    toast('Ticket supprimé',{label:'Annuler',run:async()=>{ try{ await queued(ntCol().doc(id).set(n)); toast('Ticket restauré'); }catch(err){ fbWarn(err); } }}); }catch(err){ fbWarn(err); } }); }
+function ntItems(el){ const id=el.dataset.nid, n=NOTES.get(id); if(!n) return []; const st=n.status||'open', mine=can.editTicket(n);
+  return [ ...['doing','done','open'].filter(k=>k!==st).map(k=>({icon:k==='done'?'check':k==='doing'?'doing':'redo',label:k==='done'?'Marquer résolu':k==='doing'?'Passer en cours':'Rouvrir',run:()=>ntSetStatus(id,k)})),
+    {sep:true}, {icon:'edit',label:'Modifier',hidden:!mine,run:()=>ntEdit(id)}, {icon:'copy',label:'Dupliquer',run:()=>ntDup(id)},
+    {icon:'clip',label:'Copier le texte',run:async()=>toast(await copyText(ntText(n))?'Ticket copié':'Copie impossible sur ce téléphone.')},
+    ...(mine?[{sep:true},{icon:'trash',label:'Supprimer',danger:true,run:()=>ntDelete(id)}]:[]) ]; }
+actionsOn($('ntList'),'.ticket',ntItems);
+$('ntList').addEventListener('click',e=>{ const b=e.target.closest('button[data-st]'); if(b) ntSetStatus(b.dataset.nid,b.dataset.st); });
 $('ntCopy').addEventListener('click',async()=>{
   const l=[...NOTES.values()].filter(n=>n.status!=='done').sort((a,b)=>((b.prio??1)-(a.prio??1))||(a.at||'').localeCompare(b.at||''));
   if(!l.length){ toast('Aucun ticket en cours.'); return; }
-  const txt='Tickets Apnée RottweilerT en cours ('+l.length+') :\n\n'+l.map((n,i)=>`${i+1}. [${NCAT[n.cat]||'Note'}${n.prio===2?', priorité haute':''}] ${n.title}${n.body?'\n   '+n.body.replace(/\n/g,'\n   '):''}\n   (${n.author||'Anonyme'}, ${NSTAT[n.status]||'Ouvert'})`).join('\n\n');
-  try{ await navigator.clipboard.writeText(txt); toast('Tickets copiés : colle-les dans ta conversation avec Claude'); }
-  catch(err){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast('Tickets copiés'); }catch(_){ toast('Copie impossible sur ce téléphone.'); } ta.remove(); }
+  const txt='Tickets Apnée RottweilerT en cours ('+l.length+') :\n\n'+l.map((n,i)=>`${i+1}. `+ntText(n)).join('\n\n');
+  toast(await copyText(txt)?'Tickets copiés : colle-les dans ta conversation avec Claude':'Copie impossible sur ce téléphone.');
 });
 function renderNotes(){
   $('ntAuthor').textContent=profile?'Signé : '+profile.name:'';
@@ -691,23 +909,27 @@ function renderNotes(){
   const el=$('ntList');
   if(!ntReady){ el.innerHTML='<div class="empty-t">Chargement des tickets…</div>'; return; }
   if(!list.length){ el.innerHTML=`<div class="empty-t">${all.length?'Aucun ticket dans ce filtre.':'<strong>Aucun ticket</strong>Écris le premier : une idée, une chose à faire, un problème…'}</div>`; return; }
-  el.innerHTML=list.map(n=>{ const d=n.at?new Date(n.at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
-    return `<div class="ticket st-${esc(n.status||'open')}">
-      <div class="tk-top"><span class="tag ${esc(n.cat||'info')}">${NCAT[n.cat]||'Note'}</span>${n.prio===2?'<span class="tag haute">Priorité haute</span>':n.prio===0?'<span class="tag">Basse</span>':''}<span class="tk-st">${NSTAT[n.status]||'Ouvert'}</span></div>
+  el.innerHTML=list.map(n=>{ const d=n.at?new Date(n.at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):''; const st=n.status||'open';
+    const q=st==='done'?{k:'open',l:'Rouvrir'}:{k:'done',l:'Marquer résolu'};
+    return `<div class="ticket st-${esc(st)}" data-nid="${esc(n.id)}">
+      <div class="tk-top"><span class="tag ${esc(n.cat||'info')}">${NCAT[n.cat]||'Note'}</span>${n.prio===2?'<span class="tag haute">Priorité haute</span>':n.prio===0?'<span class="tag">Basse</span>':''}<span class="tk-st">${NSTAT[st]||'Ouvert'}</span><button class="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Actions pour le ticket ${esc(n.title)}">${svgI('dots')}</button></div>
       <div class="tk-title">${esc(n.title)}</div>
       ${n.body?`<p class="tk-body">${esc(n.body)}</p>`:''}
-      <p class="status" style="margin:0">${esc(n.author||'Anonyme')} · ${esc(d)}</p>
-      <div class="tk-acts">${['open','doing','done'].filter(k=>k!==(n.status||'open')).map(k=>`<button class="btn-ghost" type="button" data-st="${k}" data-nid="${esc(n.id)}">${k==='done'?'Marquer résolu':k==='doing'?'Passer en cours':'Rouvrir'}</button>`).join('')}<button class="btn-ghost" type="button" data-nact="edit" data-nid="${esc(n.id)}">Modifier</button><button class="${armedNt===n.id?'btn-danger':'btn-ghost'}" type="button" data-nact="del" data-nid="${esc(n.id)}">${armedNt===n.id?'Confirmer ?':'Supprimer'}</button></div>
+      <p class="status" style="margin:0">${esc(n.author||'Anonyme')} · ${esc(d)}${can.editTicket(n)?' · toi':''}</p>
+      <div class="tk-acts"><button class="btn-ghost" type="button" data-st="${q.k}" data-nid="${esc(n.id)}">${q.l}</button></div>
     </div>`; }).join('');
 }
 async function onUser(u){
   ntListen(!!u); ntReset();
-  user=u; profile=null; sessions=[]; accId=u?u.uid:null;
+  user=u; profile=null; sessions=[]; progs=[]; loadedProg=null; accId=u?u.uid:null; renderProgs();
   if(!u){ $('lPass').value=''; lMsg(null); renderAccounts(); showTab('profil'); return; }
   $('who').textContent='Chargement…';
   try{ profile=await store.getProfile(); }catch(e){ profile=null; if(e.code!=='unavailable'){ fbWarn(e); } }
   if(!profile) await consumePending();
-  if(profile){ try{ sessions=await store.listSessions(); }catch(e){ fbWarn(e); } }
+  if(profile){ try{ sessions=await store.listSessions(); }catch(e){ fbWarn(e); }
+    try{ progs=await store.listProgs(); }catch(e){ progs=[]; fbWarn(e); }
+    if(profile.settings){ S={...S_DEF,...profile.settings}; lsSet(SET_LS,JSON.stringify(S)); applyTheme(); }
+    renderSettings(); renderProgs(); }
   renderAccounts(); buildPlan();
   showTab(profile?(localAccounts().some(a=>!importedMap()[a.id])?'profil':'seance'):'profil');
 }
@@ -729,16 +951,18 @@ function adaptPreset(k){
 }
 function applyPreset(k){
   const p=adaptPreset(k);
-  $('sA0').value=p.a0; $('sAd').value=p.ad; $('sR0').value=p.r0; $('sRd').value=p.rd; $('sN').value=p.n; $('sPrep').value=p.prep; $('sMax').checked=p.max;
+  $('sA0').value=p.a0; $('sAd').value=p.ad; $('sR0').value=p.r0; $('sRd').value=p.rd; $('sN').value=p.n; $('sPrep').value=fmt(S.prep); $('sMax').checked=p.max;
+  if(loadedProg){ loadedProg=null; renderProgs(); }
   document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.p===k));
   $('presetInfo').textContent=p.info + (profile?.record && k!=='prog' ? ' Calée sur ton record de '+fmt(profile.record)+'.' : '');
   buildPlan();
 }
 document.querySelectorAll('#presets .chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.p)));
-['sA0','sAd','sR0','sRd','sN','sPrep','sMax'].forEach(id=>$(id).addEventListener('input',()=>{ document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed','false')); $('presetInfo').textContent='Séance personnalisée.'; buildPlan(); }));
+['sA0','sAd','sR0','sRd','sN','sPrep','sMax'].forEach(id=>$(id).addEventListener('input',()=>{ document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed','false')); $('presetInfo').textContent=loadedProg?'':'Séance personnalisée.'; buildPlan(); }));
 
 let plan=null;
 function buildPlan(){
+  renderDirty();
   const a0=parseT($('sA0').value), ad=parseT($('sAd').value)??0, r0=parseT($('sR0').value), rd=parseT($('sRd').value)??0, prep=parseT($('sPrep').value)??0;
   const n=Math.min(12,Math.max(1,parseInt($('sN').value)||1)), mx=$('sMax').checked;
   const w=$('planWarn'); w.hidden=true;
@@ -765,7 +989,7 @@ const bestEver = () => sessions.reduce((m,s)=>Math.max(m,s.best||0),0);
 
 /* ---------- Séance : chrono ---------- */
 let audio=null, wake=null, run=null, raf=0;
-function beep(f=880,d=.15,v=.25){ try{ if(!audio) return; const o=audio.createOscillator(), g=audio.createGain(); o.frequency.value=f; o.connect(g); g.connect(audio.destination); const t=audio.currentTime; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.001,t+d); o.start(t); o.stop(t+d); }catch{} }
+function beep(f=880,d=.15,v=.25){ try{ if(!audio||!S.sound) return; v=v*S.volume/.8; const o=audio.createOscillator(), g=audio.createGain(); o.frequency.value=f; o.connect(g); g.connect(audio.destination); const t=audio.currentTime; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.001,t+d); o.start(t); o.stop(t+d); }catch{} }
 function seq(notes,v=.3){ let t=0; notes.forEach(([f,d,gap])=>{ setTimeout(()=>beep(f,d,v),t*1000); t+=d+(gap??.05); }); }
 const snd = {
   apneaStart(){ beep(1046,1.1,.5); setTimeout(()=>beep(523,1.1,.25),0); vib(900); },
@@ -780,17 +1004,19 @@ const snd = {
 function ensureAudio(){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume?.(); }catch{} }
 $('testSnd').addEventListener('click',()=>{ ensureAudio(); const order=[()=>snd.warn15(),()=>snd.count(),()=>snd.count(),()=>snd.count(),()=>snd.apneaStart(),()=>snd.minLeft(2),()=>snd.minLeft(1),()=>snd.end10(),()=>snd.apneaEnd(),()=>snd.minBreath()];
   const gaps=[0,1500,2500,3500,4500,6500,8300,9800,11300,12800]; order.forEach((f,i)=>setTimeout(f,gaps[i])); });
-function vib(p){ try{ navigator.vibrate?.(p); }catch{} }
-$('start').addEventListener('click', async ()=>{
-  if(!plan) return;
+function vib(p){ try{ if(S.vibrate) navigator.vibrate?.(p); }catch{} }
+$('start').addEventListener('click', ()=>{ if(plan) startRun(plan, currentLabel()); });
+function setInert(b){ document.querySelector('.wrap').inert=b; document.querySelector('nav.tabs').inert=b; }
+async function startRun(pl, label){
+  if(run) return;
   ensureAudio();
-  try{ wake = await navigator.wakeLock?.request('screen'); }catch{ wake=null; }
-  const phases=[]; phases.push({k:'prep',dur:Math.max(plan.prep,10)});
-  plan.steps.forEach((s,i)=>{ phases.push({k:'apnea',dur:s.apnea,max:s.max,i}); if(s.rest) phases.push({k:'rest',dur:s.rest,i}); });
-  run={phases, pi:0, t0:performance.now(), done:plan.steps.map(()=>null), plan:JSON.parse(JSON.stringify(plan)), startedAt:new Date().toISOString(), confirm:false, lastSec:-1, lastEl:0, feel:0};
-  $('runner').hidden=false; document.body.style.overflow='hidden';
+  const phases=[]; phases.push({k:'prep',dur:Math.max(pl.prep,10)});
+  pl.steps.forEach((s,i)=>{ phases.push({k:'apnea',dur:s.apnea,max:s.max,i}); if(s.rest) phases.push({k:'rest',dur:s.rest,i}); });
+  run={phases, pi:0, t0:performance.now(), done:pl.steps.map(()=>null), plan:JSON.parse(JSON.stringify(pl)), type:label||'Personnalisée', startedAt:new Date().toISOString(), confirm:false, lastSec:-1, lastEl:0, feel:0};
+  $('runner').hidden=false; document.body.style.overflow='hidden'; setInert(true); $('runner').focus({preventScroll:true});
   enterPhase(); tick();
-});
+  try{ wake = await navigator.wakeLock?.request('screen'); if(!run){ wake?.release?.(); wake=null; } }catch{ wake=null; }
+}
 function curPhase(){ return run.phases[run.pi]; }
 function enterPhase(){
   const p=curPhase(); run.t0=performance.now(); run.lastSec=-1; run.lastEl=0; run.confirm=false;
@@ -803,6 +1029,7 @@ function enterPhase(){
   $('rNext').textContent = nx ? (nx.k==='apnea' ? 'Ensuite : apnée '+(nx.max?'maximale':fmt(nx.dur)) : 'Ensuite : repos '+fmt(nx.dur)) : 'Dernière étape';
   $('rDots').innerHTML=run.plan.steps.map((_,i)=>`<i class="${run.done[i]!=null?'done':(p.i===i&&p.k==='apnea'?'cur':'')}"></i>`).join('');
   renderActions();
+  $('rLive').textContent = p.k==='apnea' ? `Apnée ${p.i+1} sur ${n}, ${p.max?'maximale':fmt(p.dur)}` : p.k==='rest' ? `Respire. Repos ${fmt(p.dur)}` : 'Respiration libre';
   if(p.k==='apnea') snd.apneaStart(); else if(p.k==='rest') snd.apneaEnd();
 }
 function renderActions(){
@@ -852,7 +1079,7 @@ function finish(completed){
   beep(784,.15); setTimeout(()=>beep(1046,.3),180);
   const done=run.done.filter(x=>x!=null), best=done.length?Math.max(...done):0, prevBest=Math.max(profile?.record||0,bestEver());
   $('runner').className='';
-  $('rStep').textContent='Séance terminée'; $('rStop').textContent='Fermer';
+  $('rStep').textContent='Séance terminée'; $('rStop').textContent='Fermer'; $('rLive').textContent='Séance terminée';
   $('rMain').innerHTML=`<div class="phase">${completed?'Bravo !':'Séance arrêtée'}</div>
     <div class="ring" style="width:min(56vw,200px)"><div class="clock" style="position:static;height:100%"><span>Meilleure apnée</span><strong>${fmt(best)}</strong><span>${best>prevBest&&prevBest?'Nouveau record ! (avant '+fmt(prevBest)+')':(prevBest?'Record : '+fmt(Math.max(prevBest,best)):'')}</span></div></div>
     <div class="sum">${run.plan.steps.map((s,i)=>`<div class="srow"><span>Apnée ${i+1}</span><span>${run.done[i]!=null?fmt(run.done[i]):'–'} / ${s.max?'max':fmt(s.apnea)}</span></div>`).join('')}</div>
@@ -864,7 +1091,7 @@ function finish(completed){
   $('rDiscard').onclick=closeRunner;
   if($('rSave')) $('rSave').onclick=async ()=>{
     $('rSave').disabled=true; $('rSave').textContent='Enregistrement…';
-    const type=[...document.querySelectorAll('#presets .chip')].find(c=>c.getAttribute('aria-pressed')==='true')?.textContent||'Personnalisée';
+    const type=run.type||'Personnalisée';
     const s={date:run.startedAt, type, plan:run.plan.steps, done:run.done, best, completed, feel:run.feel||null, note:($('rNote').value||'').trim().slice(0,300)};
     try{ const o=await store.addSession(accId,s); sessions.push(o); closeRunner(); toast('Séance enregistrée'); showTab('hist'); }
     catch{ $('rSave').disabled=false; $('rSave').textContent='Réessayer'; toast("L'enregistrement a échoué, réessaie."); }
@@ -872,7 +1099,7 @@ function finish(completed){
 }
 function closeRunner(){
   cancelAnimationFrame(raf); try{ wake?.release?.(); }catch{} wake=null; run=null;
-  $('runner').hidden=true; document.body.style.overflow='';
+  $('runner').hidden=true; document.body.style.overflow=''; setInert(false);
   // restaure la structure du chrono
   $('rStop').textContent='Arrêter';
   $('rMain').innerHTML=`<div class="phase" id="rPhase"></div><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="var(--line)" stroke-width="7"/><circle id="rArc" cx="60" cy="60" r="54" fill="none" stroke="var(--deep)" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/></svg><div class="clock"><strong id="rClock">0:00</strong><span id="rSub"></span></div></div><div class="next" id="rNext"></div><div class="dots" id="rDots"></div>`;
@@ -890,16 +1117,22 @@ function renderHist(){
     <div class="stat"><span class="label">Séances</span><strong>${list.length}</strong></div>
     <div class="stat"><span class="label">Temps en apnée</span><strong>${fmt(total)}</strong></div>`;
   drawChart(recs, goal);
-  $('hist').innerHTML = list.length ? [...recs].reverse().map(s=>`<div class="hrow">
-      <div><div class="d">${dFmt(s.date)}${s.isRec?'<span class="pill">record</span>':''}</div>
-      <div class="m">${esc(s.type||'')}${s.done&&s.done.length>1?' · '+s.done.filter(x=>x!=null).map(fmt).join(' / '):''}${s.feel?' · ressenti '+s.feel+'/5':''}${s.note?' · '+esc(s.note):''}</div></div>
-      <div class="b">${fmt(s.best)}</div>
-      <button class="x" data-del="${esc(s.id)}">Supprimer</button></div>`).join('')
-    : `<div class="empty panel"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 50h48M12 42l12-12 10 7 18-20"/><circle cx="52" cy="17" r="3"/></svg><p>Tes séances apparaîtront ici avec ta courbe de record.<br>Lance une séance dans l'onglet Séance, ou ajoute un essai ci-dessus.</p></div>`;
-  $('hist').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
-    if(b.dataset.armed){ store.delSession(accId,b.dataset.del).then(()=>{ sessions=sessions.filter(x=>x.id!==b.dataset.del); renderHist(); toast('Séance supprimée'); }).catch(()=>toast('La suppression a échoué.')); }
-    else { b.dataset.armed='1'; b.textContent='Confirmer la suppression'; b.style.color='var(--danger)'; setTimeout(()=>{ if(b.isConnected){ delete b.dataset.armed; b.textContent='Supprimer'; b.style.color=''; } },4000); }
-  });
+  // Liste : filtres par type et période, regroupée par mois
+  const types=[...new Set(list.map(s=>s.type||'Séance'))].sort((a,b)=>a.localeCompare(b,'fr'));
+  if(hType!=='all'&&!types.includes(hType)) hType='all';
+  $('hType').innerHTML='<option value="all">Tous les types</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join(''); $('hType').value=hType; $('hPeriod').value=hPeriod;
+  const since=hPeriod==='all'?0:Date.now()-(+hPeriod)*864e5;
+  const shown=[...recs].reverse().filter(s=>(hType==='all'||(s.type||'Séance')===hType)&&+new Date(s.date)>=since);
+  $('hCount').textContent=!list.length?'':shown.length===list.length?list.length+' séance'+(list.length>1?'s':''):shown.length+' sur '+list.length;
+  if(!list.length){ $('hist').innerHTML=`<div class="empty panel"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 50h48M12 42l12-12 10 7 18-20"/><circle cx="52" cy="17" r="3"/></svg><p>Tes séances apparaîtront ici avec ta courbe de record.<br>Lance une séance dans l'onglet Séance, ou ajoute un essai ci-dessus.</p></div>`; return; }
+  if(!shown.length){ $('hist').innerHTML='<div class="empty-t">Aucune séance pour ces filtres.</div>'; return; }
+  const mk=s=>{ const d=new Date(s.date); return d.getFullYear()+'-'+pad2(d.getMonth()+1); }, counts={}; shown.forEach(s=>counts[mk(s)]=(counts[mk(s)]||0)+1);
+  let last='', h='';
+  shown.forEach(s=>{ const k=mk(s); if(k!==last){ last=k; const m=new Date(s.date).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}); h+=`<div class="hmonth"><span>${esc(m)}</span><span>${counts[k]} séance${counts[k]>1?'s':''}</span></div>`; }
+    h+=`<div class="hrow lp" data-id="${esc(s.id)}"><button class="hmain" type="button"><span class="d">${dFmt(s.date)}${s.isRec?'<span class="pill">record</span>':''}</span>
+      <span class="m">${esc(s.type||'')}${s.done&&s.done.length>1?' · '+s.done.filter(x=>x!=null).map(fmt).join(' / '):''}${s.feel?' · ressenti '+s.feel+'/5':''}${s.note?' · '+esc(s.note):''}</span></button>
+      <div class="b">${fmt(s.best)}</div><button class="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Actions pour la séance du ${dFmt(s.date)}">${svgI('dots')}</button></div>`; });
+  $('hist').innerHTML=h;
 }
 function drawChart(pts, goal){
   const box=$('chart');
@@ -917,7 +1150,7 @@ function drawChart(pts, goal){
   let d=''; pts.forEach((p,i)=>{ const X=x(+new Date(p.date)), Y=y(p.rec); d+= i? ` H${X} V${Y}` : `M${X} ${Y}`; }); d+=` H${W-R}`;
   const area=d+` V${y(0)} H${x(+new Date(pts[0].date))} Z`;
   g+=`<path d="${area}" fill="var(--deep)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--deep)" stroke-width="2.5" stroke-linejoin="round"/>`;
-  pts.forEach(p=>{ const X=x(+new Date(p.date)); g+= p.isRec ? `<circle cx="${X}" cy="${y(p.best)}" r="5" fill="var(--deep)" stroke="var(--surface)" stroke-width="2"><title>${dFmt(p.date)} : ${fmt(p.best)} (record)</title></circle>` : `<circle cx="${X}" cy="${y(p.best)}" r="4" fill="var(--breath)"><title>${dFmt(p.date)} : ${fmt(p.best)}</title></circle>`; });
+  pts.forEach(p=>{ const X=x(+new Date(p.date)), A=`data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="Séance du ${dFmt(p.date)} : ${fmt(p.best)}"`; g+= p.isRec ? `<circle ${A} cx="${X}" cy="${y(p.best)}" r="6" fill="var(--deep)" stroke="var(--surface)" stroke-width="2"><title>${dFmt(p.date)} : ${fmt(p.best)} (record)</title></circle>` : `<circle ${A} cx="${X}" cy="${y(p.best)}" r="5" fill="var(--breath)"><title>${dFmt(p.date)} : ${fmt(p.best)}</title></circle>`; });
   const last=pts[pts.length-1]; const lx=Math.min(x(+new Date(last.date)), W-R-30);
   g+=`<text x="${lx}" y="${Math.max(T+10,y(last.rec)-10)}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--deep)" font-family="JetBrains Mono,monospace">${fmt(last.rec)}</text>`;
   box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du record d'apnée">${g}</svg>`;
@@ -931,7 +1164,151 @@ $('addForm').addEventListener('submit', async e=>{
   try{ const o=await store.addSession(accId,s); sessions.push(o); $('aTime').value=''; renderHist(); toast('Essai ajouté'); }catch{ $('aErr').textContent="L'ajout a échoué, réessaie."; $('aErr').hidden=false; }
 });
 
+/* ---------- Historique : actions sur une séance ---------- */
+let hType='all', hPeriod='all';
+$('hType').onchange=e=>{ hType=e.target.value; renderHist(); };
+$('hPeriod').onchange=e=>{ hPeriod=e.target.value; renderHist(); };
+const sesById=id=>sessions.find(x=>x.id===id);
+const canRedo=s=>!!(s&&Array.isArray(s.plan)&&s.plan.length);
+function redo(s){ if(!canRedo(s)) return; startRun({prep:S.prep, steps:s.plan.map(x=>({apnea:x.apnea, rest:x.rest||0, max:!!x.max}))}, s.type||'Personnalisée'); }
+function openDetail(id){ const s=sesById(id); if(!s) return;
+  const rows=canRedo(s)? s.plan.map((p,i)=>`<tr><td>Apnée ${i+1}</td><td>${s.done&&s.done[i]!=null?fmt(s.done[i]):'–'}</td><td>${p.max?'max':fmt(p.apnea)}</td><td>${p.rest?fmt(p.rest):'–'}</td></tr>`).join('')
+    : `<tr><td>Meilleure apnée</td><td>${fmt(s.best)}</td><td>–</td><td>–</td></tr>`;
+  const d=dlg(`<div class="dlg-in"><h3>Séance du ${dFmt(s.date)}</h3><p>${esc(s.type||'Séance')} · meilleure apnée <b class="num">${fmt(s.best)}</b>${s.completed===false?' · arrêtée avant la fin':''}</p>
+    <div class="tbl"><table><thead><tr><th>Apnée</th><th>Faite</th><th>Prévue</th><th>Repos</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${s.feel?`<p>Ressenti : <b>${s.feel}/5</b></p>`:''}${s.note?`<p class="tk-body">${esc(s.note)}</p>`:''}
+    <div class="dlg-acts"><button type="button" class="btn" data-a="close">Fermer</button><button type="button" class="btn-ghost" data-a="edit">Modifier</button>${canRedo(s)?'<button type="button" class="btn-ghost" data-a="redo">Refaire</button>':''}</div></div>`);
+  d.addEventListener('click',e=>{ const a=e.target.closest('[data-a]')?.dataset.a; if(!a) return; d.close(); if(a==='edit') editSession(id); if(a==='redo') redo(s); });
+  setTimeout(()=>d.querySelector('[data-a=close]').focus(),0);
+}
+function editSession(id){ const s=sesById(id); if(!s) return; const dt=new Date(s.date);
+  const d=dlg(`<form class="dlg-in" novalidate><h3>Modifier la séance</h3><p>Les temps réalisés ne changent pas.</p>
+    <div class="field"><label for="eDate">Date</label><input id="eDate" type="date" max="${localDay(new Date())}"></div>
+    <div class="field"><label for="eFeel">Ressenti</label><select id="eFeel"><option value="">Non renseigné</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n} / 5</option>`).join('')}</select></div>
+    <div class="field"><label for="eNote">Note</label><textarea id="eNote" rows="3" maxlength="300"></textarea></div>
+    <p class="warn" role="alert" hidden></p>
+    <div class="dlg-acts"><button class="btn" type="submit">Enregistrer</button><button class="btn-ghost" type="button" data-x>Annuler</button></div></form>`);
+  const f=d.querySelector('form'), er=d.querySelector('.warn'), ok=d.querySelector('[type=submit]');
+  $('eDate').value=localDay(dt); $('eFeel').value=s.feel?String(s.feel):''; $('eNote').value=s.note||'';
+  d.querySelector('[data-x]').onclick=()=>d.close();
+  f.onsubmit=async e=>{ e.preventDefault(); er.hidden=true; const v=$('eDate').value;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(v)){ er.textContent='Choisis une date.'; er.hidden=false; return; }
+    const nd=new Date(dt); const [y,m,dd]=v.split('-').map(Number); nd.setFullYear(y,m-1,dd);
+    if(nd>new Date()){ er.textContent='La date ne peut pas être dans le futur.'; er.hidden=false; return; }
+    const patch={date:nd.toISOString(), feel:+$('eFeel').value||null, note:$('eNote').value.trim().slice(0,300)};
+    ok.disabled=true; ok.textContent='Enregistrement…';
+    await guarded('ses-'+id, async()=>{ try{ await store.updateSession(id,patch); Object.assign(s,patch); d.close(); renderHist(); toast('Séance modifiée'); }
+      catch(err){ er.textContent=fbMsg(err); er.hidden=false; ok.disabled=false; ok.textContent='Enregistrer'; } }); };
+  setTimeout(()=>$('eDate').focus(),0);
+}
+async function delSession(s){
+  if(!await confirmDlg({title:`Supprimer la séance du ${dFmt(s.date)} ?`,text:`Meilleure apnée ${fmt(s.best)}. Ton record et ta courbe seront recalculés.`})) return;
+  await guarded('ses-'+s.id, async()=>{ const {id,...data}=s;
+    try{ await store.delSession(accId,id); sessions=sessions.filter(x=>x.id!==id); renderHist();
+      toast('Séance supprimée',{label:'Annuler',run:async()=>{ try{ await store.restoreSession(id,data); if(!sesById(id)) sessions.push({id,...data}); renderHist(); toast('Séance restaurée'); }catch(err){ fbWarn(err); } }}); }
+    catch(err){ fbWarn(err); } }); }
+function sesItems(el){ const s=sesById(el.dataset.id); if(!s) return [];
+  return [ {icon:'eye',label:'Voir le détail',run:()=>openDetail(s.id)},
+    {icon:'edit',label:'Modifier la date, le ressenti, la note',run:()=>editSession(s.id)},
+    {icon:'play',label:'Refaire cette séance',hidden:!canRedo(s),run:()=>redo(s)},
+    {sep:true}, {icon:'trash',label:'Supprimer',danger:true,run:()=>delSession(s)} ]; }
+actionsOn($('hist'),'.hrow',sesItems);
+$('hist').addEventListener('click',e=>{ const m=e.target.closest('.hmain'); if(m) openDetail(m.closest('.hrow').dataset.id); });
+$('chart').addEventListener('click',e=>{ const c=e.target.closest('[data-id]'); if(c) openDetail(c.dataset.id); });
+$('chart').addEventListener('keydown',e=>{ const c=e.target.closest('[data-id]'); if(c&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); openDetail(c.dataset.id); } });
+
+/* ---------- Mes séances : séances enregistrées (users/{uid}/programmes) ---------- */
+let progs=[], loadedProg=null, dirtyKey='';
+const fmtS=v=>v<0?'-'+fmt(-v):fmt(v);
+function readForm(){ const a0=parseT($('sA0').value), ad=parseT($('sAd').value)??0, r0=parseT($('sR0').value), rd=parseT($('sRd').value)??0, prep=parseT($('sPrep').value)??0;
+  if(!(a0>0)||r0==null||r0<0) return null;
+  return {a0, ad, r0, rd, n:Math.min(12,Math.max(1,parseInt($('sN').value)||1)), prep:Math.max(0,prep), max:$('sMax').checked}; }
+function setForm(p){ $('sA0').value=fmt(p.a0); $('sAd').value=fmtS(p.ad||0); $('sR0').value=fmt(p.r0); $('sRd').value=fmtS(p.rd||0); $('sN').value=p.n; $('sPrep').value=fmt(p.prep??S.prep); $('sMax').checked=!!p.max; }
+const sameCfg=(a,b)=>!!a&&!!b&&['a0','ad','r0','rd','n','prep'].every(k=>(a[k]||0)===(b[k]||0))&&!!a.max===!!b.max;
+function progSummary(p){ let apn=0, rest=0, lastA=0; for(let i=0;i<p.n;i++){ lastA=Math.max(10,p.a0+p.ad*i); apn+=lastA; if(i<p.n-1) rest+=Math.max(15,p.r0+p.rd*i); }
+  const first=fmt(Math.max(10,p.a0)), end=p.max?'max':fmt(lastA);
+  return `${p.n} apnée${p.n>1?'s':''} · ${p.n>1&&(p.ad||p.max)?first+' → '+end:first} · ~${fmt(p.prep+apn+rest)}`; }
+const sortedProgs=()=>[...progs].sort((a,b)=>(!!b.fav-!!a.fav)||((a.order??0)-(b.order??0))||a.name.localeCompare(b.name,'fr'));
+function renderProgs(focusId){ const el=$('progList'), list=sortedProgs();
+  el.innerHTML=list.length? list.map(p=>`<div class="prog lp" data-id="${esc(p.id)}"${p.id===loadedProg?' aria-current="true"':''}><button class="prog-main" type="button"><span class="pn">${p.fav?'<span class="fav" aria-label="Favori">★</span>':''}${esc(p.name)}</span><span class="pm">${esc(progSummary(p))}</span></button><button class="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Actions pour ${esc(p.name)}">${svgI('dots')}</button></div>`).join('')
+    : '<p class="status" style="margin:0">Aucune séance enregistrée. Règle une séance plus bas, puis touche « + Nouvelle séance » pour la garder et la relancer d\'un appui.</p>';
+  if(focusId){ const b=el.querySelector(`.prog[data-id="${CSS.escape(focusId)}"] .more`); if(b) b.focus({preventScroll:true}); }
+  dirtyKey=null; renderDirty(); }
+function renderDirty(){ const box=$('progDirty'); if(!box) return; const p=progs.find(x=>x.id===loadedProg), f=readForm();
+  const key=p&&f&&!sameCfg(p,f)?p.id+'|'+p.name:''; if(key===dirtyKey) return; dirtyKey=key;
+  if(!key){ box.hidden=true; box.innerHTML=''; return; }
+  box.hidden=false; box.innerHTML=`<span>Réglages modifiés par rapport à « ${esc(p.name)} ».</span><button type="button" class="btn sm" data-d="save">Enregistrer dans « ${esc(p.name)} »</button><button type="button" class="btn-ghost sm" data-d="new">Enregistrer comme nouvelle</button><button type="button" class="btn-ghost sm" data-d="undo">Revenir</button>`; }
+$('progDirty').addEventListener('click',e=>{ const a=e.target.closest('[data-d]')?.dataset.d; const p=progs.find(x=>x.id===loadedProg); if(!a||!p) return;
+  if(a==='save') progSaveCfg(p); else if(a==='new') progNew(); else loadProg(p.id); });
+function currentLabel(){ const p=progs.find(x=>x.id===loadedProg); if(p&&sameCfg(p,readForm())) return p.name;
+  return [...document.querySelectorAll('#presets .chip')].find(c=>c.getAttribute('aria-pressed')==='true')?.textContent||'Personnalisée'; }
+function loadProg(id){ const p=progs.find(x=>x.id===id); if(!p) return; setForm(p); loadedProg=id;
+  document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+  $('presetInfo').textContent=`Séance « ${p.name} » prête. Lance-la ou change ses réglages.`; buildPlan(); renderProgs(); }
+const validName=exceptId=>v=>{ if(!v) return 'Donne un nom à la séance.'; if(v.length>40) return '40 caractères au maximum.';
+  if(progs.some(p=>p.id!==exceptId&&p.name.toLocaleLowerCase('fr')===v.toLocaleLowerCase('fr'))) return `Tu as déjà une séance « ${v} ». Choisis un autre nom.`; return null; };
+function freeName(base){ let n=base, i=2; while(progs.some(p=>p.name.toLocaleLowerCase('fr')===n.toLocaleLowerCase('fr'))) n=`${base} ${i++}`; return n; }
+const nextOrder=()=>progs.reduce((m,p)=>Math.max(m,p.order??0),-1)+1;
+async function progNew(){ const f=readForm(); if(!f){ toast('Corrige d\'abord les durées de la séance.'); $('sA0').focus(); return; }
+  const chip=[...document.querySelectorAll('#presets .chip')].find(c=>c.getAttribute('aria-pressed')==='true');
+  const name=await promptDlg({title:'Nouvelle séance',label:'Nom de la séance',value:freeName(chip?chip.textContent:'Ma séance'),hint:'Les réglages actuels de l\'onglet Séance seront gardés sous ce nom.',ok:'Enregistrer',validate:validName(null)});
+  if(name==null) return;
+  await guarded('prog-new', async()=>{ const id='p-'+rid(), now=new Date().toISOString(), p={name,...f,fav:false,order:nextOrder(),createdAt:now,updated:now};
+    try{ await store.saveProg(id,p); progs.push({id,...p}); loadedProg=id; $('presetInfo').textContent=`Séance « ${name} » enregistrée.`; renderProgs(id); toast(`« ${name} » ajoutée à Mes séances`); }
+    catch(e){ fbWarn(e); } }); }
+$('progNew').onclick=progNew;
+async function progPatch(p, data, msg){ await guarded('prog-'+p.id, async()=>{ const patch={...data,updated:new Date().toISOString()};
+  try{ await store.saveProg(p.id,patch); Object.assign(p,patch); renderProgs(p.id); if(msg) toast(msg); }catch(e){ fbWarn(e); } }); }
+function progSaveCfg(p){ const f=readForm(); if(!f) return; progPatch(p,f,`« ${p.name} » mise à jour`); }
+async function progRename(p){ const name=await promptDlg({title:'Renommer la séance',label:'Nouveau nom',value:p.name,ok:'Renommer',validate:validName(p.id)});
+  if(name==null||name===p.name) return; const old=p.name; await progPatch(p,{name},`« ${old} » renommée en « ${name} »`);
+  if(loadedProg===p.id) $('presetInfo').textContent=`Séance « ${name} » prête. Lance-la ou change ses réglages.`; }
+async function progDup(p){ await guarded('prog-dup', async()=>{ const {id:_i,...data}=p, id='p-'+rid(), now=new Date().toISOString();
+  const c={...data,name:freeName(p.name+' (copie)'),fav:false,order:(p.order??0)+.5,createdAt:now,updated:now};
+  try{ await store.saveProg(id,c); progs.push({id,...c}); renderProgs(id); toast(`« ${c.name} » créée`); }catch(e){ fbWarn(e); } }); }
+const groupOf=p=>sortedProgs().filter(x=>!!x.fav===!!p.fav);
+function canMove(p,d){ const g=groupOf(p), i=g.findIndex(x=>x.id===p.id); return i+d>=0&&i+d<g.length; }
+async function progMove(p,d){ const g=groupOf(p), i=g.findIndex(x=>x.id===p.id), q=g[i+d]; if(!q) return;
+  await guarded('prog-move', async()=>{ const before=g.map(x=>[x,x.order]); g.forEach((x,k)=>x.order=k); [p.order,q.order]=[q.order,p.order];
+    try{ await Promise.all(g.map(x=>store.saveProg(x.id,{order:x.order}))); renderProgs(p.id); toast(`« ${p.name} » ${d<0?'montée':'descendue'}`); }
+    catch(e){ before.forEach(([x,o])=>x.order=o); renderProgs(p.id); fbWarn(e); } }); }
+async function progDel(p){ if(!await confirmDlg({title:`Supprimer « ${p.name} » ?`,text:'Elle disparaît de Mes séances. Ton historique et tes records ne changent pas.'})) return;
+  await guarded('prog-'+p.id, async()=>{ const {id,...data}=p;
+    try{ await store.delProg(id); progs=progs.filter(x=>x.id!==id); if(loadedProg===id){ loadedProg=null; $('presetInfo').textContent=''; } renderProgs();
+      toast(`« ${p.name} » supprimée`,{label:'Annuler',run:async()=>{ try{ await store.restoreProg(id,data); if(!progs.some(x=>x.id===id)) progs.push({id,...data}); renderProgs(id); toast('Séance restaurée'); }catch(e){ fbWarn(e); } }}); }
+    catch(e){ fbWarn(e); } }); }
+function progItems(el){ const p=progs.find(x=>x.id===el.dataset.id); if(!p) return [];
+  return [ {icon:'play',label:'Lancer',run:()=>{ loadProg(p.id); if(plan) startRun(plan,p.name); }},
+    {icon:'edit',label:'Modifier les réglages',run:()=>{ loadProg(p.id); $('sA0').scrollIntoView({block:'center'}); $('sA0').focus({preventScroll:true}); toast('Change les réglages, puis touche « Enregistrer ».'); }},
+    {icon:'rename',label:'Renommer',run:()=>progRename(p)},
+    {icon:'copy',label:'Dupliquer',run:()=>progDup(p)},
+    {icon:'star',label:p.fav?'Retirer des favoris':'Ajouter aux favoris',run:()=>progPatch(p,{fav:!p.fav,order:nextOrder()},p.fav?`« ${p.name} » retirée des favoris`:`« ${p.name} » en favori, en haut de la liste`)},
+    {icon:'up',label:'Monter',disabled:!canMove(p,-1),run:()=>progMove(p,-1)},
+    {icon:'down',label:'Descendre',disabled:!canMove(p,1),run:()=>progMove(p,1)},
+    {sep:true}, {icon:'trash',label:'Supprimer',danger:true,run:()=>progDel(p)} ]; }
+actionsOn($('progList'),'.prog',progItems);
+$('progList').addEventListener('click',e=>{ const m=e.target.closest('.prog-main'); if(m) loadProg(m.closest('.prog').dataset.id); });
+
+/* ---------- Mes données : export ---------- */
+$('exCsv').onclick=()=>{ if(!sessions.length){ toast('Aucune séance à exporter.'); return; }
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=[['Date','Type','Meilleure apnée','Meilleure apnée (secondes)','Apnées réalisées','Terminée','Ressenti (sur 5)','Note']]
+    .concat([...sessions].sort((a,b)=>a.date.localeCompare(b.date)).map(s=>[localDay(new Date(s.date)),s.type||'',fmt(s.best||0),s.best||0,(s.done||[]).filter(x=>x!=null).map(fmt).join(' / '),s.completed===false?'non':'oui',s.feel||'',s.note||'']));
+  download(`apnee-seances-${localDay(new Date())}.csv`,'﻿'+rows.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv;charset=utf-8'); toast('Fichier CSV téléchargé'); };
+$('exJson').onclick=()=>{ const pf=profile?{first:profile.first,last:profile.last,level:profile.level,record:profile.record,goal:profile.goal}:null;
+  download(`apnee-donnees-${localDay(new Date())}.json`,JSON.stringify({exporte_le:new Date().toISOString(),profil:pf,reglages:S,mes_seances:progs,seances:sessions},null,2),'application/json'); toast('Fichier JSON téléchargé'); };
+
+/* ---------- Chrono au clavier : Espace = je respire / passer, Échap = arrêter ---------- */
+document.addEventListener('keydown',e=>{
+  if($('runner').hidden||!run||document.querySelector('dialog[open]')) return;
+  if(e.target.closest&&e.target.closest('button,input,textarea,select,a')) return;
+  if(run.pi>=run.phases.length) return;
+  if(e.key===' '||e.key==='Enter'){ if(run.confirm) return; const b=$('rBreathe')||$('rSkip'); if(b){ e.preventDefault(); b.click(); } }
+  else if(e.key==='Escape'){ e.preventDefault(); if(run.confirm) $('cNo')?.click(); else $('rStop').click(); }
+});
+
 /* ---------- Démarrage ---------- */
+renderSettings(); renderProgs();
 applyPreset('prog'); renderAccounts();
 if(window.firebase && initFirebase()){
   auth.getRedirectResult().catch(e=>{ if(e.code) lMsg(fbMsg(e)); });

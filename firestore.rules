@@ -1,23 +1,32 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Chaque personne ne peut lire et écrire que ses propres données.
+    // Chaque personne ne peut lire et écrire que ses propres données
+    // (fiche, séances, et « Mes séances » sous users/{uid}/programmes).
     match /users/{uid}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
-    // Tickets (onglet Notes) : lisibles par tous, écrits par les inscrits.
-    // Sans connexion, seul le statut peut changer (export GitHub qui passe des tickets en Résolu).
+    // Tickets (onglet Notes) : lisibles par tous.
+    // Inscrits : chacun crée ses tickets, change le statut de n'importe quel ticket,
+    // mais seul l'auteur modifie ou supprime le sien.
+    // Sans connexion : seul le statut peut changer (export GitHub qui passe des tickets en Résolu).
     match /tickets/{id} {
+      function valid() {
+        return request.resource.data.kind == 'note'
+          && request.resource.data.title is string
+          && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
+          && request.resource.data.body is string && request.resource.data.body.size() <= 5000;
+      }
+      function statusOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updated'])
+          && request.resource.data.status in ['open', 'doing', 'done'];
+      }
       allow read: if true;
-      allow create, update: if request.auth != null
-        && request.resource.data.kind == 'note'
-        && request.resource.data.title is string
-        && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
-        && request.resource.data.body is string && request.resource.data.body.size() <= 5000;
-      allow update: if request.auth == null
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updated'])
-        && request.resource.data.status in ['open', 'doing', 'done'];
-      allow delete: if request.auth != null;
+      allow create: if request.auth != null && valid() && request.resource.data.authorId == request.auth.uid;
+      allow update: if request.auth != null && valid()
+        && (resource.data.authorId == request.auth.uid || statusOnly());
+      allow update: if request.auth == null && statusOnly();
+      allow delete: if request.auth != null && resource.data.authorId == request.auth.uid;
     }
   }
 }
