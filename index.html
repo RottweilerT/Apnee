@@ -22,7 +22,47 @@
 @media (pointer:coarse){html{-webkit-tap-highlight-color:transparent}}
 :root{--ux-focus:var(--deep);--ux-muted:var(--muted)}
 @media (pointer:coarse){button.who,#testSnd{min-height:40px}.reg .reg-link{display:inline-flex;align-items:center;min-height:40px}}
+/* Écran d'ouverture : sous l'eau (graphismes simples autour de l'image principale) */
+#splash{position:fixed;inset:0;z-index:9999;overflow:hidden;display:grid;place-items:center;cursor:pointer;
+  background:radial-gradient(120% 70% at 50% -10%,#3fb7c1 0%,#0f7f8a 30%,#0a4f5c 62%,#062a35 100%);transition:opacity .55s ease,visibility .55s}
+#splash.sp-out{opacity:0;visibility:hidden}
+.sp-rays,.sp-bubbles{position:absolute;inset:0;pointer-events:none}
+.sp-surface{position:absolute;left:-10%;right:-10%;top:0;height:60px;background:repeating-radial-gradient(ellipse 60px 14px at 50% 0,rgba(255,255,255,.16) 0 40%,transparent 60%);background-size:120px 30px;opacity:.35;animation:sp-wave 6s linear infinite}
+.sp-rays b{position:absolute;top:-10%;left:var(--x);width:16vmin;height:120%;background:linear-gradient(180deg,rgba(255,255,255,var(--o)),transparent 75%);transform:rotate(var(--r));transform-origin:top;filter:blur(2px);animation:sp-ray 5s ease-in-out infinite alternate}
+.sp-rays b:nth-child(2n){animation-delay:-2s}
+.sp-bubbles i{position:absolute;bottom:-30px;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;border:1.5px solid rgba(255,255,255,.55);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.55),rgba(255,255,255,.06) 60%);animation:sp-rise var(--d) linear var(--w) infinite}
+.sp-fish{position:absolute;width:38px;color:rgba(6,42,53,.55)}
+.sp-fish.f1{top:30%;left:-50px;animation:sp-swim 11s linear .3s infinite}
+.sp-fish.f2{top:66%;width:26px;left:-50px;animation:sp-swim 14s linear 2.5s infinite}
+.sp-weed{position:absolute;bottom:18px;left:0;width:100%;height:24vh;fill:none;stroke:#0e5e4a;stroke-width:7;stroke-linecap:round}
+.sp-weed path{transform-origin:bottom;animation:sp-sway 4s ease-in-out infinite alternate}.sp-weed .w2{animation-duration:5s;stroke:#13745a}
+.sp-rock{position:absolute;bottom:0;left:0;width:100%;height:40px;color:#052129}
+.sp-center{position:relative;display:grid;justify-items:center;gap:18px;animation:sp-float 4s ease-in-out infinite}
+.sp-ring{padding:6px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,255,255,.7),rgba(63,183,193,.2),rgba(255,255,255,.7));box-shadow:0 0 0 10px rgba(255,255,255,.06),0 0 0 22px rgba(255,255,255,.04),0 18px 50px rgba(0,0,0,.35)}
+.sp-ring img{display:block;width:168px;height:168px;border-radius:50%;object-fit:cover}
+.sp-name{margin:0;font-family:var(--f-display,system-ui);font-weight:800;font-size:1.6rem;color:#e8fbfc;letter-spacing:-.01em;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.sp-name span{color:#7fe3ea}
+@keyframes sp-rise{0%{transform:translate(0,0);opacity:0}10%{opacity:1}50%{transform:translate(10px,-50vh)}100%{transform:translate(-6px,-105vh);opacity:0}}
+@keyframes sp-ray{from{opacity:.55}to{opacity:1}}
+@keyframes sp-wave{to{background-position:120px 0}}
+@keyframes sp-swim{0%{transform:translateX(0)}100%{transform:translateX(calc(100vw + 100px))}}
+@keyframes sp-sway{from{transform:skewX(-5deg)}to{transform:skewX(6deg)}}
+@keyframes sp-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){#splash *{animation:none!important}.sp-bubbles i{bottom:auto;top:calc(var(--x) * .9)}}
 </style></head><body>
+<div id="splash" class="sp-sea" aria-hidden="true">
+  <div class="sp-surface"></div><div class="sp-rays"><b style="--x:18%;--r:-14deg;--o:0.16"></b><b style="--x:38%;--r:-6deg;--o:0.22"></b><b style="--x:58%;--r:4deg;--o:0.18"></b><b style="--x:76%;--r:12deg;--o:0.14"></b><b style="--x:92%;--r:18deg;--o:0.1"></b></div><div class="sp-bubbles"><i style="--x:43%;--s:8px;--d:4.9s;--w:0.2s"></i><i style="--x:70%;--s:6px;--d:4.8s;--w:0.2s"></i><i style="--x:66%;--s:8px;--d:3.6s;--w:1.7s"></i><i style="--x:10%;--s:8px;--d:3.8s;--w:1.7s"></i><i style="--x:74%;--s:6px;--d:6.8s;--w:2.5s"></i><i style="--x:76%;--s:6px;--d:5.5s;--w:1.6s"></i><i style="--x:30%;--s:6px;--d:5.4s;--w:0.5s"></i><i style="--x:55%;--s:8px;--d:5.4s;--w:2.3s"></i><i style="--x:73%;--s:22px;--d:5.9s;--w:0.4s"></i><i style="--x:75%;--s:18px;--d:4.2s;--w:0.4s"></i><i style="--x:93%;--s:6px;--d:5.5s;--w:2.5s"></i><i style="--x:65%;--s:18px;--d:5.4s;--w:3.1s"></i><i style="--x:61%;--s:14px;--d:6.7s;--w:1.4s"></i><i style="--x:33%;--s:22px;--d:4.1s;--w:3.1s"></i><i style="--x:12%;--s:14px;--d:4.6s;--w:2.0s"></i><i style="--x:45%;--s:18px;--d:5.1s;--w:2.4s"></i><i style="--x:11%;--s:6px;--d:5.3s;--w:0.7s"></i><i style="--x:45%;--s:8px;--d:6.8s;--w:1.7s"></i><i style="--x:87%;--s:6px;--d:6.2s;--w:2.3s"></i><i style="--x:42%;--s:10px;--d:5.9s;--w:2.4s"></i><i style="--x:76%;--s:22px;--d:5.1s;--w:3.4s"></i><i style="--x:36%;--s:12px;--d:5.9s;--w:0.3s"></i></div><svg class="sp-fish f1" viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10C9 1 22 1 30 10C22 19 9 19 2 10Z M30 10L39 3V17Z" fill="currentColor"/></svg><svg class="sp-fish f2" viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10C9 1 22 1 30 10C22 19 9 19 2 10Z M30 10L39 3V17Z" fill="currentColor"/></svg><svg class="sp-weed" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"><path class="w1" d="M40 120C30 90 55 70 42 40C34 22 46 10 44 0" /><path class="w2" d="M70 120C82 92 60 74 74 50C82 34 70 22 76 8"/><path class="w1" d="M330 120C320 95 345 78 334 52C326 34 340 22 336 10"/><path class="w2" d="M360 120C372 98 352 80 366 60"/></svg><svg class="sp-rock" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V26C40 14 70 22 110 18C160 12 190 24 240 20C290 16 330 8 400 22V40Z" fill="currentColor"/></svg>
+  <div class="sp-center"><div class="sp-ring"><img src="icon-512.png" alt="" width="168" height="168"></div><p class="sp-name">Apnée <span>RottweilerT</span></p></div>
+</div>
+<script>
+/* Écran d'ouverture : disparaît dès que l'appli est prête (au moins 1,4 s, au plus 3 s) ; un toucher le ferme tout de suite. */
+(function(){var s=document.getElementById('splash');if(!s)return;var t0=Date.now(),done=false;
+function hide(){if(done)return;done=true;s.classList.add('sp-out');setTimeout(function(){s.remove()},650)}
+function ready(){setTimeout(hide,Math.max(0,1400-(Date.now()-t0)))}
+if(document.readyState==='complete')ready();else addEventListener('load',ready);
+setTimeout(hide,3000);s.addEventListener('click',hide);})();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
