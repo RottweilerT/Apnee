@@ -1,8 +1,8 @@
 // Mode hors ligne : la page et ses ressources sont gardées sur l'appareil.
 // La page est toujours redemandée au réseau d'abord (pour avoir la dernière version),
 // et la copie locale ne sert que sans connexion. Les données Firebase ne passent pas par ici.
-const CACHE = 'apnee-v7';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './favicon.png', './apple-touch-icon.png'];
+const CACHE = 'apnee-v8';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './favicon.png', './apple-touch-icon.png', './splash.jpg'];
 const EXTERNAL = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', e => {
