@@ -3,10 +3,14 @@
 // et la copie locale ne sert que sans connexion. Les données Firebase ne passent pas par ici.
 const CACHE = 'apnee-v9';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './favicon.png', './apple-touch-icon.png', './splash.jpg'];
+// Moteur Firebase : mis en cache dès l'installation, pour que l'appli démarre sans réseau même juste après une mise à jour.
+const SDK = ['https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js', 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js', 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js'];
 const EXTERNAL = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+  // Le moteur Firebase est rangé à part : s'il ne se télécharge pas, l'installation continue quand même.
+  const sdk = c => Promise.all(SDK.map(u => fetch(u, { mode: 'cors', cache: 'reload' }).then(r => r.ok && c.put(u, r)).catch(() => {})));
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all([c.addAll(CORE), sdk(c)])).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
