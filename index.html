@@ -422,8 +422,8 @@ body.busy{cursor:progress}
     <span class="label">Modèles</span>
     <div class="chips" role="group" aria-label="Modèles de séance" id="presets">
       <button class="chip" data-p="prog" aria-pressed="true">Progressive</button>
-      <button class="chip" data-p="co2" aria-pressed="false">Table CO₂</button>
-      <button class="chip" data-p="o2" aria-pressed="false">Table O₂</button>
+      <button class="chip" data-p="co2" aria-pressed="false">Hypercapnie (CO₂)</button>
+      <button class="chip" data-p="o2" aria-pressed="false">Hypoxie (O₂)</button>
       <button class="chip" data-p="max" aria-pressed="false">Essai record</button>
     </div>
     <p class="status" id="presetInfo"></p>
@@ -973,16 +973,24 @@ async function onUser(u){
 /* ---------- Séance : construction ---------- */
 const presets = {
   prog:{a0:'1:00',ad:'1:00',r0:'0:30',rd:'0:30',n:3,prep:'1:00',max:false,info:'Paliers qui s\'allongent : idéal pour monter en durée.'},
-  co2:{a0:'1:30',ad:'0:00',r0:'2:00',rd:'-0:15',n:8,prep:'1:00',max:false,info:'Apnée fixe, repos de plus en plus court : habitue ton corps au CO₂.'},
-  o2:{a0:'1:00',ad:'0:15',r0:'2:00',rd:'0:00',n:8,prep:'1:00',max:false,info:'Repos fixe, apnée qui s\'allonge : travaille le manque d\'oxygène.'},
+  co2:{a0:'1:00',ad:'0:00',r0:'2:00',rd:'-0:15',n:8,prep:'1:00',max:false,info:'Hypercapnie : 8 apnées de même durée, repos de 2:00 qui raccourcit de 15 s à chaque tour. Habitue ton corps au CO₂.'},
+  o2:{a0:'1:00',ad:'0:15',r0:'2:00',rd:'0:00',n:8,prep:'1:00',max:false,info:'Hypoxie : 8 apnées de plus en plus longues, repos fixe de 2:00. Habitue ton corps au manque d\'oxygène.'},
   max:{a0:'1:00',ad:'1:00',r0:'2:00',rd:'0:00',n:3,prep:'1:00',max:true,info:'Deux apnées d\'échauffement, puis une maximale chronométrée.'}
 };
+/* Record de référence : le meilleur entre le record de la fiche et la meilleure apnée de l'historique. */
+const recRef=()=>Math.max(profile?.record||0, bestEver());
+/* Hypercapnie et hypoxie : même calcul que Freediving (Apnea) Trainer, à partir du record R.
+   - Hypercapnie (CO₂) : 8 apnées de 50 % de R ; repos de 2:00, raccourci de 15 s à chaque tour (2:00 → 0:30).
+   - Hypoxie (O₂) : 8 apnées de 30 % à 80 % de R, en paliers égaux ((80 % − 30 %) / 7) ; repos fixe de 2:00.
+   Exemple R = 4:00 → CO₂ : apnées de 2:00 ; O₂ : 1:12, 1:29, 1:46, 2:03, 2:21, 2:38, 2:55, 3:12. */
+let exactAd=null;
 function adaptPreset(k){
-  const p={...presets[k]}; const rec=profile?.record;
-  if (rec && (k==='co2'||k==='o2')){ // tables classiques basées sur ~50 % du record
-    if(k==='co2'){ p.a0=fmt(Math.round(rec*0.5/5)*5); }
-    if(k==='o2'){ p.a0=fmt(Math.round(rec*0.4/5)*5); p.ad=fmt(Math.max(5,Math.round(rec*0.4/7/5)*5)); }
-  }
+  const p={...presets[k]}; const rec=recRef(); exactAd=null;
+  if (rec && k==='co2'){ p.a0=fmt(Math.round(rec*0.5)); p.ad='0:00'; p.r0='2:00'; p.rd='-0:15'; p.n=8;
+    p.info=`Hypercapnie calée sur ton record de ${fmt(rec)} : 8 apnées de ${fmt(Math.round(rec*0.5))} (50 %), repos de 2:00 à 0:30.`; }
+  if (rec && k==='o2'){ exactAd=rec*0.5/7; p.a0=fmt(Math.round(rec*0.3)); p.ad=fmt(exactAd); p.r0='2:00'; p.rd='0:00'; p.n=8;
+    p.info=`Hypoxie calée sur ton record de ${fmt(rec)} : 8 apnées de ${fmt(Math.round(rec*0.3))} (30 %) à ${fmt(Math.round(rec*0.8))} (80 %), repos fixe de 2:00.`; }
+  if (!rec && (k==='co2'||k==='o2')) p.info+=' Indique ton record dans ta fiche (ou fais un essai record) pour que la table s\'adapte à toi.';
   if (rec && k==='max'){ p.a0=fmt(Math.round(rec*0.4/5)*5); p.ad=fmt(Math.round(rec*0.2/5)*5); }
   return p;
 }
@@ -991,7 +999,7 @@ function applyPreset(k){
   $('sA0').value=p.a0; $('sAd').value=p.ad; $('sR0').value=p.r0; $('sRd').value=p.rd; $('sN').value=p.n; $('sPrep').value=fmt(S.prep); $('sMax').checked=p.max;
   if(loadedProg){ loadedProg=null; renderProgs(); }
   document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.p===k));
-  $('presetInfo').textContent=p.info + (profile?.record && k!=='prog' ? ' Calée sur ton record de '+fmt(profile.record)+'.' : '');
+  $('presetInfo').textContent=p.info + (recRef() && k==='max' ? ' Calée sur ton record de '+fmt(recRef())+'.' : '');
   buildPlan();
 }
 document.querySelectorAll('#presets .chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.p)));
@@ -1000,13 +1008,13 @@ document.querySelectorAll('#presets .chip').forEach(c=>c.addEventListener('click
 let plan=null;
 function buildPlan(){
   renderDirty();
-  const a0=parseT($('sA0').value), ad=parseT($('sAd').value)??0, r0=parseT($('sR0').value), rd=parseT($('sRd').value)??0, prep=parseT($('sPrep').value)??0;
+  const a0=parseT($('sA0').value), ad=(exactAd!=null&&$('sAd').value===fmt(exactAd))?exactAd:(parseT($('sAd').value)??0), r0=parseT($('sR0').value), rd=parseT($('sRd').value)??0, prep=parseT($('sPrep').value)??0;
   const n=Math.min(12,Math.max(1,parseInt($('sN').value)||1)), mx=$('sMax').checked;
   const w=$('planWarn'); w.hidden=true;
   if(!(a0>0) || r0==null || r0<0){ plan=null; $('plan').innerHTML='<p class="warn">Écris les durées en minutes:secondes, par exemple 1:30.</p>'; $('start').disabled=true; ['tTot','tApn','tMax'].forEach(i=>$(i).textContent='–'); return; }
   const steps=[];
   for(let i=0;i<n;i++){
-    const apnea=Math.max(10,a0+ad*i), rest = i<n-1 ? Math.max(15,r0+rd*i) : 0;
+    const apnea=Math.max(10,Math.round(a0+ad*i)), rest = i<n-1 ? Math.max(15,r0+rd*i) : 0;
     steps.push({apnea, rest, max: mx && i===n-1});
   }
   plan={prep:Math.max(0,prep), steps};
