@@ -1,0 +1,54 @@
+name: Restaurer la base
+
+# Remet dans Firebase (projet apnee-rottweilert) le contenu d'une sauvegarde chiffrée (sauvegarde/base.json.enc).
+# Chaque document de la sauvegarde est réécrit tel qu'il était ; les documents créés depuis ne sont pas effacés.
+# « Partie à restaurer » permet de ne remettre qu'un morceau, par exemple users/<identifiant> pour un seul inscrit
+# (identifiant visible dans Firebase → Authentication). Laisser vide = toute la base.
+# À lancer à la main : onglet Actions → « Restaurer la base » → Run workflow.
+# Conseil : lancer d'abord « Vérifier la sauvegarde » sur la même version.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Commit de la sauvegarde à remettre (laisser vide = la plus récente)"
+        required: false
+        default: ""
+      partie:
+        description: "Partie à restaurer, ex. users/<identifiant> ou tickets (laisser vide = toute la base)"
+        required: false
+        default: ""
+      confirmer:
+        description: "Tape RESTAURER pour confirmer"
+        required: true
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency: sauvegarde
+
+jobs:
+  restaurer:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirmer == 'RESTAURER' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Déchiffrer la sauvegarde
+        env:
+          CLE: ${{ secrets.SAUVEGARDE_CLE }}
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          if [ -z "$CLE" ]; then echo "::error::Le secret SAUVEGARDE_CLE manque dans les réglages du dépôt"; exit 1; fi
+          if [ -n "$VERSION" ]; then git show "$VERSION:sauvegarde/base.json.enc" > /tmp/base.enc; else cp sauvegarde/base.json.enc /tmp/base.enc; fi
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in /tmp/base.enc -out /tmp/base.json -pass env:CLE \
+            || { echo "::error::Déchiffrement impossible : mauvaise clé SAUVEGARDE_CLE"; exit 1; }
+      - name: Réécrire les documents
+        env:
+          FIREBASE_COMPTE_SERVICE: ${{ secrets.FIREBASE_COMPTE_SERVICE }}
+          PARTIE: ${{ github.event.inputs.partie }}
+        run: python3 outils/firestore_sauvegarde.py restaurer /tmp/base.json "$PARTIE"
+      - name: Effacer les fichiers temporaires
+        if: always()
+        run: rm -f /tmp/base.json /tmp/base.enc
